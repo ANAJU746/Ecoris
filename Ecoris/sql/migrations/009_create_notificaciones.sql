@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS notificaciones (
+  id_notificacion INT AUTO_INCREMENT PRIMARY KEY,
+  id_empresa INT NOT NULL,
+  id_cliente INT NOT NULL,
+  id_producto INT NULL,
+  titulo VARCHAR(150) NOT NULL,
+  mensaje TEXT NOT NULL,
+  material VARCHAR(150) NULL,
+  cantidad DECIMAL(10, 2) NULL,
+  modalidad VARCHAR(40) NULL,
+  comentario TEXT NULL,
+  estado ENUM('pendiente', 'respondido') NOT NULL DEFAULT 'pendiente',
+  respuesta ENUM('disponible', 'no_disponible') NULL,
+  respuesta_mensaje TEXT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  responded_at TIMESTAMP NULL,
+  CONSTRAINT fk_notif_empresa FOREIGN KEY (id_empresa) REFERENCES empresa(id_empresa) ON DELETE CASCADE,
+  CONSTRAINT fk_notif_cliente FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente) ON DELETE CASCADE,
+  CONSTRAINT fk_notif_producto FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE SET NULL
+);

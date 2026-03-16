@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ecoris | Carrito</title>
+    <link rel="icon" href="../Logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <div class="empresa-page">
+      <header class="empresa-header">
+        <div class="brand">
+          <div>
+            <div class="logo">
+              <span class="logo-badge">
+                <img class="logo-image" src="../Logo.png" alt="Ecoris" />
+              </span>
+              <span class="logo-text">Ecoris</span>
+            </div>
+            <p class="tagline">Revisa los productos agregados a tu carrito</p>
+          </div>
+          <div class="brand-actions">
+            <a class="btn btn-ghost" href="../index.html">Volver al mapa</a>
+          </div>
+        </div>
+      </header>
+      <main class="cart-page">
+        <section class="cart-card">
+          <div class="cart-header-row">
+            <h2>Carrito de compras</h2>
+            <span class="tag" id="cart-count">0 productos</span>
+          </div>
+          <div class="cart-items" id="cart-items"></div>
+          <p id="cart-empty">Aun no hay productos.</p>
+          <div class="cart-actions">
+            <button class="btn btn-ghost" id="cart-clear" type="button">
+              Vaciar carrito
+            </button>
+            <button class="btn" id="cart-checkout" type="button">
+              Solicitar pedido
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script>
+      const cartItems = document.getElementById("cart-items");
+      const cartEmpty = document.getElementById("cart-empty");
+      const cartCount = document.getElementById("cart-count");
+      const cartCheckout = document.getElementById("cart-checkout");
+      const cartClear = document.getElementById("cart-clear");
+
+      let cart = [];
+
+      const loadCart = () => {
+        try {
+          cart = JSON.parse(localStorage.getItem("ecoris_cart") || "[]");
+        } catch (error) {
+          cart = [];
+        }
+      };
+
+      const saveCart = () => {
+        localStorage.setItem("ecoris_cart", JSON.stringify(cart));
+      };
+
+      const updateCount = () => {
+        if (cartCount) {
+          cartCount.textContent = `${cart.length} productos`;
+        }
+      };
+
+      const updateCartUI = () => {
+        if (!cartItems) {
+          return;
+        }
+        cartItems.innerHTML = "";
+        cart.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "cart-item";
+          const title = document.createElement("div");
+          title.className = "cart-item-title";
+          title.textContent = item.name;
+          const sub = document.createElement("div");
+          sub.className = "cart-item-sub";
+          sub.textContent = item.material || "Material sin definir";
+          const controls = document.createElement("div");
+          controls.className = "cart-controls";
+
+          const minusBtn = document.createElement("button");
+          minusBtn.type = "button";
+          minusBtn.className = "cart-qty-btn";
+          minusBtn.textContent = "-";
+          minusBtn.disabled = item.qty <= 1;
+          minusBtn.addEventListener("click", () => changeQuantity(item.id, -1));
+
+          const qtyText = document.createElement("span");
+          qtyText.className = "cart-qty";
+          qtyText.textContent = String(item.qty);
+
+          const plusBtn = document.createElement("button");
+          plusBtn.type = "button";
+          plusBtn.className = "cart-qty-btn";
+          plusBtn.textContent = "+";
+          const maxQty = item.maxQty ?? null;
+          plusBtn.disabled = maxQty !== null && item.qty >= maxQty;
+          plusBtn.addEventListener("click", () => changeQuantity(item.id, 1));
+
+          const removeBtn = document.createElement("button");
+          removeBtn.type = "button";
+          removeBtn.className = "cart-remove";
+          removeBtn.textContent = "Quitar";
+          removeBtn.addEventListener("click", () => removeFromCart(item.id));
+
+          controls.appendChild(minusBtn);
+          controls.appendChild(qtyText);
+          controls.appendChild(plusBtn);
+          controls.appendChild(removeBtn);
+          row.appendChild(title);
+          row.appendChild(sub);
+          row.appendChild(controls);
+          cartItems.appendChild(row);
+        });
+
+        if (cartEmpty) {
+          cartEmpty.style.display = cart.length ? "none" : "block";
+        }
+        updateCount();
+      };
+
+      const changeQuantity = (id, delta) => {
+        const item = cart.find((entry) => entry.id === id);
+        if (!item) {
+          return;
+        }
+        const maxQty = item.maxQty ?? null;
+        const next = item.qty + delta;
+        if (next < 1) {
+          return;
+        }
+        if (maxQty !== null && next > maxQty) {
+          return;
+        }
+        item.qty = next;
+        saveCart();
+        updateCartUI();
+      };
+
+      const removeFromCart = (id) => {
+        cart = cart.filter((item) => item.id !== id);
+        saveCart();
+        updateCartUI();
+      };
+
+      const savePedido = () => {
+        const pedidos = JSON.parse(localStorage.getItem("ecoris_pedidos") || "[]");
+        pedidos.push({
+          id: Date.now(),
+          items: cart,
+          createdAt: new Date().toISOString(),
+        });
+        localStorage.setItem("ecoris_pedidos", JSON.stringify(pedidos));
+      };
+
+      if (cartCheckout) {
+        cartCheckout.addEventListener("click", () => {
+          if (!cart.length) {
+            alert("Agrega productos antes de solicitar un pedido.");
+            return;
+          }
+          savePedido();
+          alert("Pedido enviado a las empresas. Te contactaran pronto.");
+        });
+      }
+
+      if (cartClear) {
+        cartClear.addEventListener("click", () => {
+          cart = [];
+          saveCart();
+          updateCartUI();
+        });
+      }
+
+      loadCart();
+      updateCartUI();
+    </script>
+  </body>
+</html>

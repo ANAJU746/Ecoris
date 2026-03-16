@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Ecoris | Panel de empresa</title>
+		<link rel="icon" href="../Logo.png" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&family=Bebas+Neue&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../style.css" />
+	</head>
+	<body>
+		<div class="empresa-page">
+			<header class="empresa-header">
+				<div class="brand">
+					<div>
+						<div class="logo">
+							<span class="logo-badge">
+								<img class="logo-image" src="../Logo.png" alt="Ecoris" />
+							</span>
+							<span class="logo-text">Ecoris</span>
+						</div>
+						<p class="tagline" id="empresa-tagline">
+							Panel de empresa para publicar residuos reutilizables
+						</p>
+					</div>
+					<div class="brand-actions">
+						<a class="btn btn-ghost" href="../index.html">Volver al mapa</a>
+						<button class="btn" type="button">Publicar material</button>
+					</div>
+				</div>
+				<div class="empresa-hero animate-in">
+					<div class="empresa-hero-text">
+						<p class="eyebrow">Panel de residuos</p>
+						<h1>Sube lo que tienes disponible hoy</h1>
+						<p class="lead">
+							Agrega foto, define el estado del material y publica precios
+							claros para los compradores.
+						</p>
+						<div class="hero-chips">
+							<span class="hero-chip">Registro rapido</span>
+							<span class="hero-chip">Precios por unidad</span>
+							<span class="hero-chip">Contactos directos</span>
+						</div>
+					</div>
+					<div class="empresa-hero-card">
+						<div class="hero-card-title">Resumen semanal</div>
+								<div class="hero-metrics" id="empresa-metrics">
+							<div>
+										<p class="metric-number" id="metric-productos">08</p>
+								<p class="metric-label">Residuos activos</p>
+							</div>
+							<div>
+										<p class="metric-number" id="metric-solicitudes">22</p>
+								<p class="metric-label">Solicitudes</p>
+							</div>
+							<div>
+										<p class="metric-number" id="metric-precio">$320</p>
+								<p class="metric-label">Precio promedio</p>
+							</div>
+						</div>
+						<div class="status-legend">
+							<span class="legend-item">
+								<span class="legend-dot dot-new"></span>Nuevo
+							</span>
+							<span class="legend-item">
+								<span class="legend-dot dot-used"></span>Usado
+							</span>
+							<span class="legend-item">
+								<span class="legend-dot dot-bad"></span>Mal estado
+							</span>
+						</div>
+					</div>
+				</div>
+			</header>
+			<main class="empresa-main">
+				<section class="empresa-form-panel">
+					<div class="material-panel-intro">
+						<div class="material-panel-copy">
+							<p class="eyebrow">Carga guiada</p>
+							<h2>Panel inteligente para subir material</h2>
+							<p>
+								Completa cada bloque para entregar una ficha limpia, formal y comprensible para los compradores.
+							</p>
+							<div class="panel-badges">
+								<span class="panel-badge is-green">Validacion rapida</span>
+								<span class="panel-badge is-amber">Precios claros</span>
+								<span class="panel-badge is-neutral">Checklist formal</span>
+							</div>
+						</div>
+						<div class="panel-steps">
+							<div class="panel-step is-active">
+								<span class="panel-step-index">1</span>
+								<div>
+									<p>Datos base</p>
+									<small>Nombre, categoria y fotografia.</small>
+								</div>
+							</div>
+							<div class="panel-step">
+								<span class="panel-step-index">2</span>
+								<div>
+									<p>Precio &amp; modalidad</p>
+									<small>Define moneda, limites y negociacion.</small>
+								</div>
+							</div>
+							<div class="panel-step">
+								<span class="panel-step-index">3</span>
+								<div>
+									<p>Logistica &amp; contacto</p>
+									<small>Ubicacion, retiros y certificaciones.</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<form class="empresa-stack" id="producto-form" action="#" method="post">
+						<div class="material-highlights">
+							<div>
+								<p class="eyebrow">Estado</p>
+								<p class="highlight-value">Ficha limpia</p>
+								<p class="highlight-sub">Usa nombres descriptivos y sin abreviaturas.</p>
+							</div>
+							<div>
+								<p class="eyebrow">Finanzas</p>
+								<p class="highlight-value">Precio consistente</p>
+								<p class="highlight-sub">Comparte min y maximo para negociar con claridad.</p>
+							</div>
+							<div>
+								<p class="eyebrow">Logistica</p>
+								<p class="highlight-value">Entrega definida</p>
+								<p class="highlight-sub">Indica quien recoge y horarios disponibles.</p>
+							</div>
+						</div>
+						<div class="form-section">
+							<div class="section-title">Datos del residuo</div>
+							<div class="form-grid">
+								<div class="field">
+									<label for="material-name">Nombre del material</label>
+									<input
+										class="input"
+										id="material-name"
+										name="material-name"
+										type="text"
+										placeholder="Ej. Polietileno triturado"
+									/>
+								</div>
+								<div class="field">
+									<label for="material-category">Categoria</label>
+									<select class="input" id="material-category" name="category">
+										<option value="">Selecciona una categoria</option>
+										<option value="plastico">Plastico</option>
+										<option value="metal">Metal</option>
+										<option value="organico">Organico</option>
+										<option value="papel">Papel y carton</option>
+										<option value="vidrio">Vidrio</option>
+									</select>
+								</div>
+								<div class="field">
+									<label for="material-type">Tipo de residuo</label>
+									<select class="input" id="material-type" name="type">
+										<option value="">Selecciona el tipo</option>
+										<option value="solido">Solido</option>
+										<option value="liquido">Liquido</option>
+										<option value="mezcla">Mezcla</option>
+									</select>
+								</div>
+								<div class="field">
+									<label for="material-qty">Cantidad disponible</label>
+									<input
+										class="input"
+										id="material-qty"
+										name="qty"
+										type="number"
+										min="0"
+										step="0.1"
+										placeholder="Ej. 2.5"
+									/>
+								</div>
+								<div class="field">
+									<label for="material-unit">Unidad</label>
+									<select class="input" id="material-unit" name="unit">
+										<option value="kg">Kg</option>
+										<option value="ton">Tonelada</option>
+										<option value="m3">m3</option>
+										<option value="pieza">Piezas</option>
+									</select>
+								</div>
+								<div class="field field-dropzone">
+									<label for="material-photo">Foto del material</label>
+									<div class="material-dropzone">
+										<div class="dropzone-copy">
+											<span class="dropzone-icon" aria-hidden="true">⬆</span>
+											<div>
+												<p>Arrastra o haz clic para subir</p>
+												<small>Formatos JPG o PNG, max 10&nbsp;MB.</small>
+											</div>
+										</div>
+										<input
+											id="material-photo"
+											name="photo"
+											type="file"
+											accept="image/*"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="status-group">
+								<label class="status-option">
+									<input type="radio" name="estado" value="nuevo" checked />
+									<span class="status-dot status-new"></span>
+									<span class="status-text">Nuevo</span>
+									<span class="status-note">Listo para reuso</span>
+								</label>
+								<label class="status-option">
+									<input type="radio" name="estado" value="usado" />
+									<span class="status-dot status-used"></span>
+									<span class="status-text">Usado</span>
+									<span class="status-note">Funcional</span>
+								</label>
+								<label class="status-option">
+									<input type="radio" name="estado" value="mal-estado" />
+									<span class="status-dot status-bad"></span>
+									<span class="status-text">Mal estado</span>
+									<span class="status-note">Para valorizacion</span>
+								</label>
+							</div>
+							<div class="field full">
+								<label for="material-desc">Descripcion</label>
+								<textarea
+									class="input"
+									id="material-desc"
+									name="descripcion"
+									rows="3"
+									placeholder="Detalle de composicion, humedad, limpieza, etc."
+								></textarea>
+							</div>
+						</div>
+
+						<div class="form-section">
+							<div class="section-title">Precio y modalidad</div>
+							<div class="form-grid-3">
+								<div class="field">
+									<label for="price-unit">Precio por unidad</label>
+									<input
+										class="input"
+										id="price-unit"
+										name="price"
+										type="number"
+										min="0"
+										step="0.01"
+										placeholder="Ej. 180"
+									/>
+								</div>
+								<div class="field">
+									<label for="price-currency">Moneda</label>
+									<select class="input" id="price-currency" name="currency">
+										<option value="mxn">MXN</option>
+										<option value="usd">USD</option>
+									</select>
+								</div>
+								<div class="field">
+									<label for="price-min">Precio minimo</label>
+									<input
+										class="input"
+										id="price-min"
+										name="price-min"
+										type="number"
+										min="0"
+										step="0.01"
+										placeholder="Ej. 150"
+									/>
+								</div>
+								<div class="field">
+									<label for="price-max">Precio maximo</label>
+									<input
+										class="input"
+										id="price-max"
+										name="price-max"
+										type="number"
+										min="0"
+										step="0.01"
+										placeholder="Ej. 220"
+									/>
+								</div>
+								<div class="field">
+									<label for="modalidad">Modalidad</label>
+									<select class="input" id="modalidad" name="modalidad">
+										<option value="venta">Venta</option>
+										<option value="donacion">Donacion</option>
+										<option value="intercambio">Intercambio</option>
+										<option value="ambos">Venta y donacion</option>
+									</select>
+								</div>
+								<div class="field">
+									<label for="negociable">Negociable</label>
+									<select class="input" id="negociable" name="negociable">
+										<option value="si">Si</option>
+										<option value="no">No</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-section">
+							<div class="section-title">Logistica y contacto</div>
+							<div class="form-grid">
+								<div class="field">
+									<label for="location">Ubicacion</label>
+									<input
+										class="input"
+										id="location"
+										name="location"
+										type="text"
+										placeholder="Direccion o colonia"
+									/>
+								</div>
+								<div class="field">
+									<label for="schedule">Horario de retiro</label>
+									<input
+										class="input"
+										id="schedule"
+										name="schedule"
+										type="text"
+										placeholder="Lun - Vie 9:00 a 17:00"
+									/>
+								</div>
+								<div class="field">
+									<label for="available-date">Disponible desde</label>
+									<input
+										class="input"
+										id="available-date"
+										name="available-date"
+										type="date"
+									/>
+								</div>
+								<div class="field">
+									<label for="contact">Contacto directo</label>
+									<input
+										class="input"
+										id="contact"
+										name="contact"
+										type="text"
+										placeholder="Telefono o correo"
+									/>
+								</div>
+								<div class="field">
+									<label for="pickup">Recoleccion</label>
+									<select class="input" id="pickup" name="pickup">
+										<option value="empresa">La empresa entrega</option>
+										<option value="comprador">Comprador recoge</option>
+										<option value="ambos">Ambos</option>
+									</select>
+								</div>
+								<div class="field">
+									<label for="certs">Certificaciones</label>
+									<input
+										class="input"
+										id="certs"
+										name="certs"
+										type="text"
+										placeholder="Ej. NOM, ISO, control interno"
+									/>
+								</div>
+							</div>
+							<div class="field full">
+								<label for="tags">Etiquetas</label>
+								<input
+									class="input"
+									id="tags"
+									name="tags"
+									type="text"
+									placeholder="Ej. limpio, compactado, pallets"
+								/>
+							</div>
+							<div class="material-checklist">
+								<p class="section-title">Checklist formal antes de publicar</p>
+								<ul>
+									<li>Confirma que la cantidad disponible corresponde al inventario real.</li>
+									<li>Describe el estado del material con la misma nomenclatura usada en tus contratos.</li>
+									<li>Agrega al menos una etiqueta que facilite los filtros de los clientes.</li>
+									<li>Incluye ventana de retiro y contacto directo para acelerar la respuesta.</li>
+								</ul>
+							</div>
+						</div>
+							<div class="form-actions">
+								<div class="form-actions-buttons">
+									<button class="btn btn-lime" type="submit">Publicar residuo</button>
+									<button class="btn btn-honey" type="reset">Limpiar formulario</button>
+								</div>
+								<p class="form-status" role="status"></p>
+							</div>
+						</div>
+					</form>
+				</section>
+
+				<aside class="empresa-side">
+					<div class="side-card animate-in">
+						<div class="section-title">Vista previa</div>
+						<article class="preview-card">
+							<div class="preview-header">
+								<div>
+									<p class="preview-title">Polietileno triturado</p>
+									<p class="preview-sub">Plastico · 2.5 ton</p>
+								</div>
+								<span class="preview-price">$180 MXN</span>
+							</div>
+							<p class="preview-text">
+								Material limpio y seco, listo para reutilizacion. Disponible
+								para entrega inmediata.
+							</p>
+							<div class="preview-tags">
+								<span class="tag">Venta</span>
+								<span class="tag">Negociable</span>
+								<span class="tag">Entrega</span>
+							</div>
+							<div class="preview-meta">
+								<span class="legend-item">
+									<span class="legend-dot dot-new"></span>Nuevo
+								</span>
+								<span>Zona Centro</span>
+								<span>Disponible hoy</span>
+							</div>
+						</article>
+					</div>
+					<div class="side-card animate-in">
+						<div class="section-title">Tips para mejores ventas</div>
+						<ul class="tips-list">
+							<li>Sube una foto con buena luz y fondo claro.</li>
+							<li>Indica si el material esta limpio o separado.</li>
+							<li>Actualiza el precio cuando cambie el volumen.</li>
+							<li>Responde en menos de 24 horas.</li>
+						</ul>
+					</div>
+					<div class="side-card animate-in">
+						<div class="section-title">Residuos publicados</div>
+						<div class="mini-list" id="productos-list">
+							<div class="mini-item">
+								<div>
+									<p class="mini-title">Aluminio prensado</p>
+									<p class="mini-sub">1.2 ton · Usado</p>
+								</div>
+								<span class="mini-price">$420</span>
+							</div>
+							<div class="mini-item">
+								<div>
+									<p class="mini-title">Carton corrugado</p>
+									<p class="mini-sub">0.8 ton · Nuevo</p>
+								</div>
+								<span class="mini-price">$160</span>
+							</div>
+							<div class="mini-item">
+								<div>
+									<p class="mini-title">Plastico mixto</p>
+									<p class="mini-sub">3.1 ton · Mal estado</p>
+								</div>
+								<span class="mini-price">$110</span>
+							</div>
+						</div>
+					</div>
+				</aside>
+			</main>
+		</div>
+		<script>
+			const token = localStorage.getItem("ecoris_token");
+			const empresaTagline = document.getElementById("empresa-tagline");
+			const productosList = document.getElementById("productos-list");
+			const metricProductos = document.getElementById("metric-productos");
+			const metricPrecio = document.getElementById("metric-precio");
+
+			const toMoney = (value, moneda) => {
+				if (value === null || value === undefined || value === "") {
+					return "-";
+				}
+				const parsed = Number(value);
+				if (Number.isNaN(parsed)) {
+					return "-";
+				}
+				return `$${parsed} ${moneda || ""}`.trim();
+			};
+
+			const renderProductos = (items) => {
+				if (!productosList) {
+					return;
+				}
+				productosList.innerHTML = "";
+				if (!items || !items.length) {
+					const empty = document.createElement("div");
+					empty.className = "mini-empty";
+					empty.textContent = "Aun no hay residuos publicados.";
+					productosList.appendChild(empty);
+					return;
+				}
+
+				items.forEach((item) => {
+					const row = document.createElement("div");
+					row.className = "mini-item";
+					const left = document.createElement("div");
+					const title = document.createElement("p");
+					title.className = "mini-title";
+					title.textContent = item.nombre_material || "Residuo";
+					const sub = document.createElement("p");
+					sub.className = "mini-sub";
+					const cantidad = item.cantidad ? `${item.cantidad} ${item.unidad || ""}` : "";
+					sub.textContent = `${cantidad}${cantidad ? " · " : ""}${
+						item.estado_material || ""
+					}`.trim();
+					left.appendChild(title);
+					left.appendChild(sub);
+					const right = document.createElement("div");
+					right.className = "mini-item-right";
+
+					const price = document.createElement("span");
+					price.className = "mini-price";
+					price.textContent = toMoney(item.precio_unitario, item.moneda);
+
+					const editButton = document.createElement("button");
+					editButton.type = "button";
+					editButton.className = "btn btn-ghost mini-edit";
+					editButton.textContent = "Editar";
+					editButton.addEventListener("click", () => startEdit(item));
+
+					right.appendChild(price);
+					right.appendChild(editButton);
+
+					row.appendChild(left);
+					row.appendChild(right);
+					productosList.appendChild(row);
+				});
+			};
+
+			const loadEmpresa = async () => {
+				if (!token) {
+					window.location.href = "../Sesiones/iniciosesion.html";
+					return;
+				}
+
+				try {
+					const response = await fetch("/api/empresa/me", {
+						headers: { Authorization: `Bearer ${token}` },
+					});
+
+					if (!response.ok) {
+						throw new Error("No autorizado");
+					}
+
+					const data = await response.json();
+					if (empresaTagline && data.empresa?.nombre_empresa) {
+						empresaTagline.textContent = data.empresa.nombre_empresa;
+					}
+					renderProductos(data.productos || []);
+					if (metricProductos) {
+						metricProductos.textContent = String(
+							(data.productos || []).length
+						).padStart(2, "0");
+					}
+
+					if (metricPrecio && data.productos?.length) {
+						const sum = data.productos.reduce(
+							(acc, item) => acc + (Number(item.precio_unitario) || 0),
+							0
+						);
+						const avg = sum / data.productos.length;
+						metricPrecio.textContent = toMoney(avg, data.productos[0]?.moneda);
+					}
+				} catch (error) {
+					localStorage.removeItem("ecoris_token");
+					window.location.href = "../Sesiones/iniciosesion.html";
+				}
+			};
+			const form = document.getElementById("producto-form");
+			const statusText = document.querySelector(".form-status");
+			const submitButton = form ? form.querySelector('button[type="submit"]') : null;
+			const resetButton = form ? form.querySelector('button[type="reset"]') : null;
+			let editingId = null;
+			let editingFotoUrl = "";
+
+			const toNumber = (value) => {
+				if (value === undefined || value === null || value === "") {
+					return null;
+				}
+				const parsed = Number(String(value).replace(",", "."));
+				return Number.isNaN(parsed) ? null : parsed;
+			};
+
+			const formatDateInput = (value) => {
+				if (!value) {
+					return "";
+				}
+				return String(value).split("T")[0];
+			};
+
+			const setInputValue = (id, value) => {
+				const input = document.getElementById(id);
+				if (input) {
+					input.value = value ?? "";
+				}
+			};
+
+			const clearEditState = () => {
+				editingId = null;
+				editingFotoUrl = "";
+				if (submitButton) {
+					submitButton.textContent = "Publicar residuo";
+				}
+				if (statusText) {
+					statusText.textContent = "";
+				}
+			};
+
+			const startEdit = (item) => {
+				if (!form || !item) {
+					return;
+				}
+
+				editingId = item.id_producto;
+				editingFotoUrl = item.foto_url || "";
+
+				setInputValue("material-name", item.nombre_material);
+				setInputValue("material-category", item.categoria);
+				setInputValue("material-type", item.tipo_residuo);
+				setInputValue("material-qty", item.cantidad ?? "");
+				setInputValue("material-unit", item.unidad);
+				setInputValue("material-desc", item.descripcion);
+				setInputValue("price-unit", item.precio_unitario ?? "");
+				setInputValue("price-currency", item.moneda);
+				setInputValue("price-min", item.precio_min ?? "");
+				setInputValue("price-max", item.precio_max ?? "");
+				setInputValue("modalidad", item.modalidad);
+				setInputValue("negociable", item.negociable);
+				setInputValue("location", item.ubicacion);
+				setInputValue("schedule", item.horario_retiro);
+				setInputValue("available-date", formatDateInput(item.disponible_desde));
+				setInputValue("contact", item.contacto);
+				setInputValue("pickup", item.recoleccion);
+				setInputValue("certs", item.certificaciones);
+				setInputValue("tags", item.etiquetas);
+
+				const estadoValue =
+					item.estado_material === "mal_estado" ? "mal-estado" : item.estado_material;
+				const estadoInput = form.querySelector(
+					`input[name="estado"][value="${estadoValue}"]`
+				);
+				if (estadoInput) {
+					estadoInput.checked = true;
+				}
+
+				if (submitButton) {
+					submitButton.textContent = "Actualizar residuo";
+				}
+				if (statusText) {
+					statusText.textContent = "Editando residuo...";
+				}
+			};
+
+			const uploadProductoFoto = async (file) => {
+				if (!file || !file.size) {
+					return "";
+				}
+				const body = new FormData();
+				body.append("foto", file);
+				const response = await fetch("/api/productos/foto", {
+					method: "POST",
+					headers: { Authorization: `Bearer ${token}` },
+					body,
+				});
+				if (!response.ok) {
+					throw new Error("No se pudo subir la foto.");
+				}
+				const data = await response.json();
+				return data.foto_url || "";
+			};
+
+			const buildPayload = (formData, fotoUrl) => {
+				return {
+					nombre_material: formData.get("material-name") || "",
+					categoria: formData.get("category") || "",
+					tipo_residuo: formData.get("type") || "",
+					cantidad: toNumber(formData.get("qty")),
+					unidad: formData.get("unit") || "",
+					foto_url: fotoUrl || "",
+					estado_material: formData.get("estado") || "nuevo",
+					descripcion: formData.get("descripcion") || "",
+					precio_unitario: toNumber(formData.get("price")),
+					precio_min: toNumber(formData.get("price-min")),
+					precio_max: toNumber(formData.get("price-max")),
+					moneda: formData.get("currency") || "",
+					modalidad: formData.get("modalidad") || "",
+					negociable: formData.get("negociable") || "",
+					ubicacion: formData.get("location") || "",
+					horario_retiro: formData.get("schedule") || "",
+					disponible_desde: formData.get("available-date") || null,
+					contacto: formData.get("contact") || "",
+					recoleccion: formData.get("pickup") || "",
+					certificaciones: formData.get("certs") || "",
+					etiquetas: formData.get("tags") || "",
+				};
+			};
+
+			if (form) {
+				form.addEventListener("submit", async (event) => {
+					event.preventDefault();
+					if (statusText) {
+						statusText.textContent = editingId
+							? "Actualizando..."
+							: "Guardando...";
+					}
+
+					try {
+						const formData = new FormData(form);
+						const file = formData.get("photo");
+						const fotoUrl = await uploadProductoFoto(file);
+						const payload = buildPayload(formData, fotoUrl || editingFotoUrl);
+						const endpoint = editingId ? `/api/productos/${editingId}` : "/api/productos";
+						const method = editingId ? "PUT" : "POST";
+						const response = await fetch(endpoint, {
+							method,
+							headers: {
+								"Content-Type": "application/json",
+								Authorization: `Bearer ${token}`,
+							},
+							body: JSON.stringify(payload),
+						});
+
+						if (!response.ok) {
+							throw new Error("No se pudo guardar el residuo.");
+						}
+
+						form.reset();
+						if (statusText) {
+							statusText.textContent = editingId
+								? "Residuo actualizado con exito."
+								: "Residuo publicado con exito.";
+						}
+						clearEditState();
+						loadEmpresa();
+					} catch (error) {
+						if (statusText) {
+							statusText.textContent = "Error al guardar. Intenta de nuevo.";
+						}
+					}
+				});
+
+				if (resetButton) {
+					resetButton.addEventListener("click", () => {
+						clearEditState();
+					});
+				}
+			}
+
+			loadEmpresa();
+		</script>
+	</body>
+</html>

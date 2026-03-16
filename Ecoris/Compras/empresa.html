@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ecoris | Detalle de empresa</title>
+    <link rel="icon" href="../Logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <div class="empresa-page">
+      <header class="empresa-header">
+        <div class="brand">
+          <div>
+            <div class="logo">
+              <span class="logo-badge">
+                <img class="logo-image" src="../Logo.png" alt="Ecoris" />
+              </span>
+              <span class="logo-text">Ecoris</span>
+            </div>
+            <p class="tagline" id="empresa-detalle-tagline">Detalle de empresa</p>
+          </div>
+          <div class="brand-actions">
+            <a class="btn btn-ghost" href="../index.html">Volver al mapa</a>
+          </div>
+        </div>
+      </header>
+      <main class="empresa-main">
+        <section class="empresa-form-panel">
+          <div class="form-section">
+            <div class="section-title" id="empresa-nombre">Empresa</div>
+            <div class="form-grid">
+              <div class="field">
+                <label>Ubicacion</label>
+                <p class="input" id="empresa-ubicacion">-</p>
+              </div>
+              <div class="field">
+                <label>Modalidad</label>
+                <p class="input" id="empresa-modalidad">-</p>
+              </div>
+              <div class="field">
+                <label>Material principal</label>
+                <p class="input" id="empresa-material">-</p>
+              </div>
+              <div class="field">
+                <label>Etiquetas</label>
+                <p class="input" id="empresa-etiquetas">-</p>
+              </div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="section-title">Residuos disponibles</div>
+            <div class="mini-list" id="empresa-productos"></div>
+          </div>
+        </section>
+        <aside class="empresa-side">
+          <div class="side-card animate-in">
+            <div class="section-title">Resumen</div>
+            <div class="hero-metrics">
+              <div>
+                <p class="metric-number" id="empresa-total">00</p>
+                <p class="metric-label">Publicaciones activas</p>
+              </div>
+              <div>
+                <p class="metric-number" id="empresa-precio">-</p>
+                <p class="metric-label">Precio promedio</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const empresaId = params.get("id");
+      const productosEl = document.getElementById("empresa-productos");
+      const nombreEl = document.getElementById("empresa-nombre");
+      const ubicacionEl = document.getElementById("empresa-ubicacion");
+      const modalidadEl = document.getElementById("empresa-modalidad");
+      const materialEl = document.getElementById("empresa-material");
+      const etiquetasEl = document.getElementById("empresa-etiquetas");
+      const totalEl = document.getElementById("empresa-total");
+      const precioEl = document.getElementById("empresa-precio");
+
+      const toMoney = (value, moneda) => {
+        if (value === null || value === undefined || value === "") {
+          return "-";
+        }
+        const parsed = Number(value);
+        if (Number.isNaN(parsed)) {
+          return "-";
+        }
+        return `$${parsed} ${moneda || ""}`.trim();
+      };
+
+      const normalizeImageUrl = (value) => {
+        if (!value) {
+          return "../Logo.png";
+        }
+        const text = String(value);
+        if (text.startsWith("http") || text.startsWith("/")) {
+          return text;
+        }
+        return `/uploads/${text}`;
+      };
+
+      const getPriceLabel = (item) => {
+        const unit = toMoney(item.precio_unitario, item.moneda);
+        if (unit !== "-") {
+          return unit;
+        }
+        const min = item.precio_min ?? null;
+        const max = item.precio_max ?? null;
+        if (min === null && max === null) {
+          return "-";
+        }
+        if (min !== null && max !== null) {
+          return `$${min} - $${max} ${item.moneda || ""}`.trim();
+        }
+        return `$${min ?? max} ${item.moneda || ""}`.trim();
+      };
+
+      const renderProductos = (items) => {
+        if (!productosEl) {
+          return;
+        }
+        productosEl.innerHTML = "";
+        if (!items || !items.length) {
+          const empty = document.createElement("div");
+          empty.className = "mini-empty";
+          empty.textContent = "Esta empresa aun no tiene residuos publicados.";
+          productosEl.appendChild(empty);
+          return;
+        }
+
+        items.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "mini-item mini-item-product";
+
+          const left = document.createElement("div");
+          left.className = "mini-item-left";
+
+          const thumb = document.createElement("img");
+          thumb.className = "mini-thumb";
+          thumb.src = normalizeImageUrl(item.foto_url);
+          thumb.alt = item.nombre_material || "Residuo";
+          thumb.addEventListener("error", () => {
+            thumb.src = "../Logo.png";
+          });
+
+          const info = document.createElement("div");
+          info.className = "mini-item-info";
+
+          const title = document.createElement("p");
+          title.className = "mini-title";
+          title.textContent = item.nombre_material || "Residuo";
+
+          const sub = document.createElement("p");
+          sub.className = "mini-sub";
+          const cantidad = item.cantidad ? `${item.cantidad} ${item.unidad || ""}` : "";
+          sub.textContent = `${cantidad}${cantidad ? " · " : ""}${item.estado_material || ""}`.trim();
+
+          const desc = document.createElement("p");
+          desc.className = "mini-desc";
+          desc.textContent = item.descripcion || "Sin descripcion.";
+
+          info.appendChild(title);
+          info.appendChild(sub);
+          info.appendChild(desc);
+
+          left.appendChild(thumb);
+          left.appendChild(info);
+
+          const right = document.createElement("div");
+          right.className = "mini-item-right";
+
+          const price = document.createElement("span");
+          price.className = "mini-price";
+          price.textContent = getPriceLabel(item);
+
+          const details = document.createElement("a");
+          details.className = "btn btn-ghost mini-details";
+          details.textContent = "Ver detalles";
+          const detailParams = new URLSearchParams();
+          detailParams.set("id", item.id_producto);
+          if (empresaId) {
+            detailParams.set("empresa", empresaId);
+          }
+          if (item.foto_url) {
+            detailParams.set("foto", item.foto_url);
+          }
+          details.href = `producto.html?${detailParams.toString()}`;
+
+          right.appendChild(price);
+          right.appendChild(details);
+
+          row.appendChild(left);
+          row.appendChild(right);
+          productosEl.appendChild(row);
+        });
+      };
+
+      const loadEmpresa = async () => {
+        if (!empresaId) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/empresa/${empresaId}`);
+          if (!response.ok) {
+            throw new Error("No se pudo cargar la empresa.");
+          }
+          const data = await response.json();
+          const empresa = data.empresa || {};
+          const productos = data.productos || [];
+
+          if (nombreEl) nombreEl.textContent = empresa.nombre_empresa || "Empresa";
+          if (ubicacionEl) {
+            ubicacionEl.textContent = [empresa.municipio, empresa.estado]
+              .filter(Boolean)
+              .join(", ") || "-";
+          }
+          if (modalidadEl) modalidadEl.textContent = empresa.modalidad || "-";
+          if (materialEl) materialEl.textContent = empresa.tipo_material || "-";
+          if (etiquetasEl) etiquetasEl.textContent = empresa.etiquetas || "-";
+
+          renderProductos(productos);
+
+          if (totalEl) {
+            totalEl.textContent = String(productos.length).padStart(2, "0");
+          }
+          if (precioEl && productos.length) {
+            const sum = productos.reduce(
+              (acc, item) => acc + (Number(item.precio_unitario) || 0),
+              0
+            );
+            const avg = sum / productos.length;
+            precioEl.textContent = toMoney(avg, productos[0]?.moneda);
+          }
+        } catch (error) {
+          if (nombreEl) {
+            nombreEl.textContent = "No disponible";
+          }
+        }
+      };
+
+      loadEmpresa();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Ecoris | Inicio de sesion</title>
+		<link rel="icon" href="../Logo.png" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&family=Bebas+Neue&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../style.css" />
+	</head>
+	<body class="login-body">
+		<div class="login-auras" aria-hidden="true">
+			<span class="login-blob blob-one"></span>
+			<span class="login-blob blob-two"></span>
+			<span class="login-blob blob-three"></span>
+		</div>
+		<div class="empresa-page login-shell">
+			<header class="empresa-header login-header">
+				<div class="brand">
+					<div>
+						<div class="logo">
+							<span class="logo-badge">
+								<img class="logo-image" src="../Logo.png" alt="Ecoris" />
+							</span>
+							<span class="logo-text">Ecoris</span>
+						</div>
+						<p class="tagline">Acceso para empresas y gestores</p>
+					</div>
+					<div class="brand-actions login-header-actions">
+						<p class="login-header-note">Mapea, negocia y comparte residuos en minutos.</p>
+						<a class="btn btn-ghost" href="../index.html">Volver al mapa</a>
+					</div>
+				</div>
+			</header>
+			<main class="empresa-main login-grid">
+				<section class="empresa-form-panel login-form-card">
+					<div class="login-form-head">
+						<p class="login-chip">Acceso seguro</p>
+						<h1>Inicia sesion en tu tablero circular</h1>
+						<p>Conecta con empresas y clientes para gestionar materiales reutilizables sin friccion.</p>
+						<div class="login-head-meta">
+							<span>Disponibilidad 24/7</span>
+							<span>Proteccion con JWT</span>
+						</div>
+					</div>
+					<form class="empresa-stack login-form" id="inicio-form" action="#" method="post">
+						<div class="form-section login-fields">
+							<div class="section-title">Elige tu rol</div>
+							<p class="login-sub">Usa la misma cuenta para publicar residuos o comprar materiales.</p>
+							<div class="role-toggle login-role-toggle">
+								<label class="role-option">
+									<input
+										type="radio"
+										name="tipo"
+										value="empresa"
+										checked
+									/>
+									<span>Empresa</span>
+								</label>
+								<label class="role-option">
+									<input type="radio" name="tipo" value="cliente" />
+									<span>Cliente</span>
+								</label>
+							</div>
+							<div class="form-grid login-grid-fields">
+								<div class="field login-field">
+									<label for="correo">Correo</label>
+									<div class="input-shell">
+										<span class="input-icon" aria-hidden="true">
+											<svg viewBox="0 0 24 24" role="presentation">
+												<path d="M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zm0 0 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+											</svg>
+										</span>
+										<input
+											class="input"
+											id="correo"
+											name="correo"
+											type="email"
+											placeholder="correo@dominio.com"
+											required
+										/>
+									</div>
+								</div>
+								<div class="field login-field">
+									<label for="contrasena">Contrasena</label>
+									<div class="input-shell">
+										<span class="input-icon" aria-hidden="true">
+											<svg viewBox="0 0 24 24" role="presentation">
+												<path d="M7 11V7a5 5 0 0 1 10 0v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+												<rect x="5" y="11" width="14" height="10" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="1.6" />
+												<circle cx="12" cy="16" r="1" fill="currentColor" />
+											</svg>
+										</span>
+										<input
+											class="input"
+											id="contrasena"
+											name="contrasena"
+											type="password"
+											placeholder="Tu contrasena"
+											required
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-actions login-form-actions">
+							<button class="btn" type="submit">Ingresar</button>
+							<a class="btn btn-ghost" href="registro.html">Crear cuenta</a>
+							<p class="form-status" role="status"></p>
+						</div>
+					</form>
+				</section>
+				<aside class="empresa-side login-showcase">
+					<div class="login-showcase-art" aria-hidden="true">
+						<div class="login-sun"></div>
+						<div class="login-hill hill-one"></div>
+						<div class="login-hill hill-two"></div>
+						<div class="login-hill hill-three"></div>
+						<span class="login-tree tree-one"></span>
+						<span class="login-tree tree-two"></span>
+						<span class="login-tree tree-three"></span>
+					</div>
+					<div class="login-showcase-content">
+						<p class="login-eyebrow">Ecosistema conectado</p>
+						<h2>Gestiona residuos con un estilo más simple e intuitivo.</h2>
+						<p class="login-showcase-text">
+							Visualiza ubicaciones, precios y disponibilidad antes de solicitar o publicar materiales reutilizables.
+						</p>
+						<div class="login-badges">
+							<span class="login-badge">Alertas inmediatas</span>
+							<span class="login-badge">Contratos verdes</span>
+							<span class="login-badge">Cuentas verificadas</span>
+						</div>
+						<div class="side-card animate-in role-panel login-role-card" id="role-panel">
+							<div class="section-title" id="role-title">Que obtienes</div>
+							<ul class="tips-list" id="role-tips">
+								<li>Publica residuos con precio y estado.</li>
+								<li>Recibe solicitudes directas.</li>
+								<li>Actualiza disponibilidad en segundos.</li>
+							</ul>
+						</div>
+					</div>
+				</aside>
+			</main>
+		</div>
+		<script>
+			const form = document.getElementById("inicio-form");
+			const statusText = document.querySelector(".form-status");
+			const roleInputs = document.querySelectorAll("input[name='tipo']");
+			const rolePanel = document.getElementById("role-panel");
+			const roleTitle = document.getElementById("role-title");
+			const roleTips = document.getElementById("role-tips");
+			const loginFormCard = document.querySelector(".login-form-card");
+
+			const roleContent = {
+				empresa: {
+					title: "Que obtienes",
+					tips: [
+						"Publica residuos con precio y estado.",
+						"Recibe solicitudes directas.",
+						"Actualiza disponibilidad en segundos.",
+					],
+				},
+				cliente: {
+					title: "Como comprar",
+					tips: [
+						"Explora materiales disponibles.",
+						"Contacta empresas verificadas.",
+						"Negocia volumen y entrega.",
+					],
+				},
+			};
+
+			const updateRole = () => {
+				const selected = document.querySelector("input[name='tipo']:checked");
+				if (!selected || !rolePanel || !roleTitle || !roleTips) {
+					return;
+				}
+				const content = roleContent[selected.value] || roleContent.empresa;
+				rolePanel.classList.add("is-swapping");
+				setTimeout(() => {
+					roleTitle.textContent = content.title;
+					roleTips.innerHTML = "";
+					content.tips.forEach((tip) => {
+						const li = document.createElement("li");
+						li.textContent = tip;
+						roleTips.appendChild(li);
+					});
+					rolePanel.classList.remove("is-swapping");
+				}, 150);
+				if (loginFormCard) {
+					loginFormCard.dataset.role = selected.value;
+					loginFormCard.classList.remove("role-transition");
+					void loginFormCard.offsetWidth;
+					loginFormCard.classList.add("role-transition");
+				}
+			};
+
+			roleInputs.forEach((input) => {
+				input.addEventListener("change", updateRole);
+			});
+
+			updateRole();
+
+			if (form) {
+				form.addEventListener("submit", async (event) => {
+					event.preventDefault();
+					if (statusText) {
+						statusText.textContent = "Validando...";
+					}
+
+					try {
+						const formData = new FormData(form);
+						const payload = {
+							tipo: formData.get("tipo") || "empresa",
+							correo: formData.get("correo") || "",
+							contrasena: formData.get("contrasena") || "",
+						};
+
+						const response = await fetch("/api/iniciosecion", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							credentials: "include",
+							body: JSON.stringify(payload),
+						});
+
+						if (!response.ok) {
+							throw new Error("Credenciales invalidas.");
+						}
+
+						const data = await response.json();
+						if (data.token) {
+							localStorage.setItem("ecoris_token", data.token);
+						}
+						const userData = {
+							nombre: data.nombre || formData.get("correo") || "Usuario",
+							correo: data.correo || formData.get("correo") || "",
+							telefono: data.telefono || "",
+							tipo: data.tipo || payload.tipo,
+							foto_url: data.foto_url || "",
+						};
+						localStorage.setItem("ecoris_user", JSON.stringify(userData));
+
+						form.reset();
+						if (statusText) {
+							statusText.textContent = "Inicio de sesion correcto.";
+						}
+
+						if (data.tipo === "empresa") {
+							window.location.href = "../Empresas/perfilempresa.html";
+						} else {
+							window.location.href = "../index.html";
+						}
+					} catch (error) {
+						if (statusText) {
+							statusText.textContent = "No se pudo iniciar sesion.";
+						}
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

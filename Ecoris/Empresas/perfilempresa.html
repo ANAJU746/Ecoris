@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ecoris | Perfil de empresa</title>
+    <link rel="icon" href="../Logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../vendor/leaflet/leaflet.css" />
+    <script src="../vendor/leaflet/leaflet.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <div class="empresa-page">
+      <header class="empresa-header">
+        <div class="brand">
+          <div>
+            <div class="logo">
+              <span class="logo-badge">
+                <img class="logo-image" src="../Logo.png" alt="Ecoris" />
+              </span>
+              <span class="logo-text">Ecoris</span>
+            </div>
+            <p class="tagline" id="perfil-tagline">Perfil de empresa</p>
+          </div>
+          <div class="brand-actions">
+            <a class="btn btn-ghost" href="../index.html">Volver al mapa</a>
+            <a class="btn" href="empresa.html">Ir al panel</a>
+            <button class="btn btn-ghost" id="logout-empresa" type="button">
+              Cerrar sesion
+            </button>
+          </div>
+        </div>
+      </header>
+      <main class="empresa-main profile-layout profile-layout--empresa">
+        <aside class="profile-sidebar">
+          <div class="profile-sidebar-brand">
+            <span class="profile-sidebar-logo">Ec</span>
+            <div>
+              <p class="profile-sidebar-eyebrow">Panel</p>
+              <p>Ecoris</p>
+            </div>
+          </div>
+          <button class="profile-nav-item is-active" type="button">
+            <span aria-hidden="true">●</span>
+            <span>Perfil</span>
+          </button>
+          <button class="profile-nav-item" type="button">
+            <span aria-hidden="true">◆</span>
+            <span>Actividad</span>
+          </button>
+          <button class="profile-nav-item" type="button">
+            <span aria-hidden="true">▣</span>
+            <span>Productos</span>
+          </button>
+          <button class="profile-nav-item" type="button">
+            <span aria-hidden="true">⚙</span>
+            <span>Configuracion</span>
+          </button>
+        </aside>
+        <section class="profile-main">
+          <div class="profile-hero-card animate-in">
+            <div class="profile-hero-main">
+              <p class="profile-hero-eyebrow">Empresa verificada</p>
+              <h1 class="profile-hero-title" id="perfil-nombre">-</h1>
+              <p class="profile-hero-text">
+                Centraliza tu informacion, actualiza precios y comparte tu inventario con las empresas correctas.
+              </p>
+              <div class="profile-hero-actions">
+                <a class="btn btn-secondary" href="empresa.html">Ir al panel</a>
+                <a class="btn btn-ghost" href="../index.html">Ver mapa</a>
+              </div>
+            </div>
+            <div class="profile-hero-stats">
+              <div class="stat-pill">
+                <span class="stat-label">Residuos activos</span>
+                <span class="stat-value" id="perfil-total">00</span>
+              </div>
+              <div class="stat-pill">
+                <span class="stat-label">Precio promedio</span>
+                <span class="stat-value" id="perfil-precio">-</span>
+              </div>
+            </div>
+          </div>
+          <div class="profile-panels">
+            <section class="empresa-form-panel profile-card profile-card--form">
+              <div class="form-section glimmer-card">
+                <div class="section-title">Informacion general</div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="perfil-municipio-input">Municipio</label>
+                    <input class="input" id="perfil-municipio-input" type="text" placeholder="Municipio" />
+                  </div>
+                  <div class="field">
+                    <label for="perfil-estado-input">Estado</label>
+                    <input class="input" id="perfil-estado-input" type="text" placeholder="Estado" />
+                  </div>
+                  <div class="field">
+                    <label for="perfil-tipo-input">Tipo de empresa</label>
+                    <input class="input" id="perfil-tipo-input" type="text" placeholder="Ej. Reciclaje" />
+                  </div>
+                  <div class="field">
+                    <label for="perfil-material-input">Material principal</label>
+                    <input class="input" id="perfil-material-input" type="text" placeholder="Ej. Plastico" />
+                  </div>
+                  <div class="field">
+                    <label for="perfil-modalidad-input">Modalidad</label>
+                    <input class="input" id="perfil-modalidad-input" type="text" placeholder="Venta, donacion" />
+                  </div>
+                  <div class="field full">
+                    <label for="perfil-etiquetas-input">Etiquetas</label>
+                    <input class="input" id="perfil-etiquetas-input" type="text" placeholder="Ej. limpio, compactado" />
+                  </div>
+                  <div class="field full">
+                    <label for="perfil-ubicacion-input">Ubicacion escrita</label>
+                    <input class="input" id="perfil-ubicacion-input" type="text" placeholder="Ej. Parque Industrial, Villahermosa" list="perfil-direccion-sugerencias" />
+                    <datalist id="perfil-direccion-sugerencias"></datalist>
+                  </div>
+                  <div class="field">
+                    <label for="perfil-lat-input">Latitud</label>
+                    <input class="input" id="perfil-lat-input" type="text" placeholder="Ej. 17.9894" />
+                  </div>
+                  <div class="field">
+                    <label for="perfil-lng-input">Longitud</label>
+                    <input class="input" id="perfil-lng-input" type="text" placeholder="Ej. -92.9475" />
+                  </div>
+                  <div class="field full">
+                    <label>Ubicacion en mapa</label>
+                    <div class="form-map" id="perfil-map"></div>
+                    <p class="helper-text">Haz clic en el mapa para guardar la ubicacion.</p>
+                  </div>
+                  <div class="field full">
+                    <label for="perfil-logo-input">Logo de la empresa</label>
+                    <div class="logo-upload">
+                      <img id="perfil-logo-preview" src="../Logo.png" alt="Logo de empresa" />
+                      <div class="logo-controls">
+                        <input class="input" id="perfil-logo-input" type="file" accept="image/*" />
+                        <button class="btn btn-secondary" id="perfil-logo-subir" type="button">
+                          Subir logo
+                        </button>
+                        <p class="logo-status" id="perfil-logo-status" role="status"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="btn" id="perfil-guardar" type="button">Guardar perfil</button>
+                  <p class="form-status" id="perfil-status" role="status"></p>
+                </div>
+              </div>
+            </section>
+            <section class="profile-card profile-card--activity">
+              <div class="section-title">Actividad reciente</div>
+              <div class="mini-list" id="perfil-productos"></div>
+            </section>
+          </div>
+          <section class="profile-card profile-card--notifications">
+            <div class="section-title">Notificaciones de pedidos</div>
+            <p class="section-subtitle">
+              Responde si el material esta disponible o no para mantener informados a los clientes.
+            </p>
+            <div class="notification-list" id="empresa-notificaciones"></div>
+          </section>
+        </section>
+        <aside class="profile-side-column">
+          <div class="profile-card profile-card--side animate-in">
+            <div class="section-title">Resumen inmediato</div>
+            <p class="profile-side-text">
+              Tus cifras se actualizan cada vez que guardas un residuo nuevo. Mantente activo para aparecer en las primeras posiciones del mapa.
+            </p>
+            <div class="profile-side-progress">
+              <span>Visibilidad</span>
+              <div class="progress-bar"><span style="width: 68%"></span></div>
+            </div>
+          </div>
+          <div class="profile-card profile-card--side animate-in">
+            <div class="section-title">Siguiente paso</div>
+            <ul class="tips-list">
+              <li>Completa municipio y estado en tu perfil.</li>
+              <li>Sube al menos 3 residuos para mejorar tu visibilidad.</li>
+              <li>Revisa tu panel para editar precios.</li>
+            </ul>
+          </div>
+        </aside>
+      </main>
+    </div>
+    <script>
+      const token = localStorage.getItem("ecoris_token");
+      const nombreEl = document.getElementById("perfil-nombre");
+      const municipioInput = document.getElementById("perfil-municipio-input");
+      const estadoInput = document.getElementById("perfil-estado-input");
+      const tipoInput = document.getElementById("perfil-tipo-input");
+      const materialInput = document.getElementById("perfil-material-input");
+      const modalidadInput = document.getElementById("perfil-modalidad-input");
+      const etiquetasInput = document.getElementById("perfil-etiquetas-input");
+      const ubicacionInput = document.getElementById("perfil-ubicacion-input");
+      const direccionList = document.getElementById("perfil-direccion-sugerencias");
+      const latInput = document.getElementById("perfil-lat-input");
+      const lngInput = document.getElementById("perfil-lng-input");
+      const mapContainer = document.getElementById("perfil-map");
+      const guardarBtn = document.getElementById("perfil-guardar");
+      const statusText = document.getElementById("perfil-status");
+      const logoInput = document.getElementById("perfil-logo-input");
+      const logoPreview = document.getElementById("perfil-logo-preview");
+      const logoButton = document.getElementById("perfil-logo-subir");
+      const logoStatus = document.getElementById("perfil-logo-status");
+      const logoutBtn = document.getElementById("logout-empresa");
+      const productosEl = document.getElementById("perfil-productos");
+      const totalEl = document.getElementById("perfil-total");
+      const precioEl = document.getElementById("perfil-precio");
+      const empresaNotificacionesEl = document.getElementById("empresa-notificaciones");
+      let mapInstance = null;
+      let mapMarker = null;
+      let lastGeocodeResults = [];
+
+      const fetchGeocode = async (query) => {
+        const encoded = encodeURIComponent(query);
+        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encoded}`;
+        const response = await fetch(url, { headers: { Accept: "application/json" } });
+        if (!response.ok) {
+          return [];
+        }
+        return response.json();
+      };
+
+      const updateSuggestions = (results) => {
+        if (!direccionList) {
+          return;
+        }
+        direccionList.innerHTML = "";
+        results.forEach((item) => {
+          const option = document.createElement("option");
+          option.value = item.display_name;
+          direccionList.appendChild(option);
+        });
+      };
+
+      const setCoordsFromResult = (result) => {
+        if (!result) {
+          return;
+        }
+        const lat = Number(result.lat);
+        const lng = Number(result.lon);
+        if (Number.isFinite(lat) && Number.isFinite(lng)) {
+          if (latInput) latInput.value = lat.toFixed(6);
+          if (lngInput) lngInput.value = lng.toFixed(6);
+          setMarker(lat, lng);
+        }
+      };
+
+      const handleDireccionInput = (() => {
+        let timeoutId = null;
+        return () => {
+          const query = ubicacionInput?.value?.trim();
+          if (!query || query.length < 4) {
+            return;
+          }
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+          timeoutId = setTimeout(async () => {
+            try {
+              lastGeocodeResults = await fetchGeocode(query);
+              updateSuggestions(lastGeocodeResults);
+              setCoordsFromResult(lastGeocodeResults[0]);
+            } catch (error) {
+              // Ignore lookup failures.
+            }
+          }, 500);
+        };
+      })();
+
+      const toMoney = (value, moneda) => {
+        if (value === null || value === undefined || value === "") {
+          return "-";
+        }
+        const parsed = Number(value);
+        if (Number.isNaN(parsed)) {
+          return "-";
+        }
+        return `$${parsed} ${moneda || ""}`.trim();
+      };
+
+      const renderProductos = (items) => {
+        if (!productosEl) {
+          return;
+        }
+        productosEl.innerHTML = "";
+        if (!items || !items.length) {
+          const empty = document.createElement("div");
+          empty.className = "mini-empty";
+          empty.textContent = "Aun no hay residuos publicados.";
+          productosEl.appendChild(empty);
+          return;
+        }
+
+        items.slice(0, 5).forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "mini-item";
+          const left = document.createElement("div");
+          const title = document.createElement("p");
+          title.className = "mini-title";
+          title.textContent = item.nombre_material || "Residuo";
+          const sub = document.createElement("p");
+          sub.className = "mini-sub";
+          const cantidad = item.cantidad ? `${item.cantidad} ${item.unidad || ""}` : "";
+          sub.textContent = `${cantidad}${cantidad ? " · " : ""}${item.estado_material || ""}`.trim();
+          left.appendChild(title);
+          left.appendChild(sub);
+          const price = document.createElement("span");
+          price.className = "mini-price";
+          price.textContent = toMoney(item.precio_unitario, item.moneda);
+          row.appendChild(left);
+          row.appendChild(price);
+          productosEl.appendChild(row);
+        });
+      };
+
+      const formatDateTime = (value) => {
+        if (!value) {
+          return "";
+        }
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return "";
+        }
+        return date.toLocaleString("es-MX", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        });
+      };
+
+      const renderEmpresaNotificaciones = (items) => {
+        if (!empresaNotificacionesEl) {
+          return;
+        }
+
+        empresaNotificacionesEl.innerHTML = "";
+
+        if (!items.length) {
+          const empty = document.createElement("div");
+          empty.className = "notification-empty";
+          empty.textContent = "No tienes notificaciones por ahora.";
+          empresaNotificacionesEl.appendChild(empty);
+          return;
+        }
+
+        items.forEach((item) => {
+          const card = document.createElement("article");
+          card.className = "notification-card";
+          card.dataset.id = item.id_notificacion;
+
+          const head = document.createElement("div");
+          head.className = "notification-card-head";
+          const requester = document.createElement("div");
+          requester.innerHTML = `<strong>${item.cliente_nombre || "Cliente"}</strong><p>${item.cliente_correo || "Sin correo"}</p>`;
+          const status = document.createElement("span");
+          status.className = `status-pill status-pill--${item.estado}`;
+          status.textContent = item.estado === "respondido" ? "Respondido" : "Pendiente";
+          head.appendChild(requester);
+          head.appendChild(status);
+
+          const body = document.createElement("div");
+          body.className = "notification-card-body";
+          const summary = document.createElement("p");
+          summary.textContent = item.mensaje || "Solicitud de material";
+          const meta = document.createElement("ul");
+          meta.className = "notification-meta";
+          const materialLine = document.createElement("li");
+          materialLine.textContent = `Material: ${item.material || "Sin especificar"}`;
+          const qtyLine = document.createElement("li");
+          qtyLine.textContent = `Cantidad solicitada: ${item.cantidad || 1}`;
+          const dateLine = document.createElement("li");
+          dateLine.textContent = formatDateTime(item.created_at);
+          meta.appendChild(materialLine);
+          meta.appendChild(qtyLine);
+          meta.appendChild(dateLine);
+          if (item.comentario) {
+            const note = document.createElement("li");
+            note.textContent = `Nota del cliente: ${item.comentario}`;
+            meta.appendChild(note);
+          }
+          body.appendChild(summary);
+          body.appendChild(meta);
+
+          card.appendChild(head);
+          card.appendChild(body);
+
+          if (item.estado === "pendiente") {
+            const responseBlock = document.createElement("div");
+            responseBlock.className = "notification-response";
+            const textarea = document.createElement("textarea");
+            textarea.className = "notification-response-input";
+            textarea.placeholder = "Mensaje opcional para el cliente";
+            responseBlock.appendChild(textarea);
+
+            const actions = document.createElement("div");
+            actions.className = "notification-actions";
+            const approve = document.createElement("button");
+            approve.type = "button";
+            approve.className = "btn btn-lime";
+            approve.dataset.respuesta = "disponible";
+            approve.dataset.id = item.id_notificacion;
+            approve.textContent = "Disponible";
+            const reject = document.createElement("button");
+            reject.type = "button";
+            reject.className = "btn btn-honey";
+            reject.dataset.respuesta = "no_disponible";
+            reject.dataset.id = item.id_notificacion;
+            reject.textContent = "No disponible";
+            actions.appendChild(approve);
+            actions.appendChild(reject);
+            responseBlock.appendChild(actions);
+            card.appendChild(responseBlock);
+          }
+
+          if (item.estado === "respondido") {
+            const responseInfo = document.createElement("div");
+            responseInfo.className = "notification-response-info";
+            const label = document.createElement("p");
+            label.innerHTML = `<strong>Respuesta:</strong> ${
+              item.respuesta === "disponible" ? "Disponible" : "No disponible"
+            }`;
+            const message = document.createElement("p");
+            message.textContent = item.respuesta_mensaje || "Sin comentarios adicionales.";
+            const respondedAt = document.createElement("p");
+            respondedAt.className = "notification-date";
+            respondedAt.textContent = `Respondido: ${formatDateTime(item.responded_at)}`;
+            responseInfo.appendChild(label);
+            responseInfo.appendChild(message);
+            responseInfo.appendChild(respondedAt);
+            card.appendChild(responseInfo);
+          }
+
+          empresaNotificacionesEl.appendChild(card);
+        });
+      };
+
+      const loadEmpresaNotificaciones = async () => {
+        if (!token || !empresaNotificacionesEl) {
+          return;
+        }
+        try {
+          const response = await fetch("/api/notificaciones/empresa", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!response.ok) {
+            throw new Error("No autorizado");
+          }
+          const data = await response.json();
+          renderEmpresaNotificaciones(data.notificaciones || []);
+        } catch (error) {
+          const fallback = document.createElement("div");
+          fallback.className = "notification-empty";
+          fallback.textContent = "No se pudieron cargar las notificaciones.";
+          empresaNotificacionesEl.innerHTML = "";
+          empresaNotificacionesEl.appendChild(fallback);
+        }
+      };
+
+      const responderNotificacion = async (id, respuesta, mensaje) => {
+        if (!token || !Number.isFinite(id)) {
+          return;
+        }
+        try {
+          const response = await fetch(`/api/notificaciones/${id}/responder`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ respuesta, mensaje }),
+          });
+          if (!response.ok) {
+            throw new Error("No se pudo responder");
+          }
+          await loadEmpresaNotificaciones();
+        } catch (error) {
+          alert("No se pudo enviar la respuesta. Intenta de nuevo.");
+        }
+      };
+
+      if (empresaNotificacionesEl) {
+        empresaNotificacionesEl.addEventListener("click", (event) => {
+          const button = event.target.closest("[data-respuesta]");
+          if (!button) {
+            return;
+          }
+          const id = Number(button.dataset.id);
+          const respuesta = button.dataset.respuesta;
+          const card = button.closest(".notification-card");
+          const messageInput = card?.querySelector(".notification-response-input");
+          const mensaje = messageInput?.value?.trim() || "";
+          responderNotificacion(id, respuesta, mensaje);
+        });
+      }
+
+      const loadPerfil = async () => {
+        if (!token) {
+          window.location.href = "../Sesiones/iniciosesion.html";
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/empresa/me", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (!response.ok) {
+            throw new Error("No autorizado");
+          }
+
+          const data = await response.json();
+          const empresa = data.empresa || {};
+          const productos = data.productos || [];
+
+          if (nombreEl) nombreEl.textContent = empresa.nombre_empresa || "-";
+          if (municipioInput) municipioInput.value = empresa.municipio || "";
+          if (estadoInput) estadoInput.value = empresa.estado || "";
+          if (tipoInput) tipoInput.value = empresa.tipo_empresa || "";
+          if (materialInput) materialInput.value = empresa.tipo_material || "";
+          if (modalidadInput) modalidadInput.value = empresa.modalidad || "";
+          if (etiquetasInput) etiquetasInput.value = empresa.etiquetas || "";
+          if (ubicacionInput) ubicacionInput.value = empresa.direccion || "";
+          const latValue = Number(empresa.lat);
+          const lngValue = Number(empresa.lng);
+          const hasCoords =
+            Number.isFinite(latValue) &&
+            Number.isFinite(lngValue) &&
+            (Math.abs(latValue) > 0.0001 || Math.abs(lngValue) > 0.0001);
+          if (latInput) latInput.value = hasCoords ? latValue : "";
+          if (lngInput) lngInput.value = hasCoords ? lngValue : "";
+          if (logoPreview) {
+            logoPreview.src = empresa.foto_url || "../Logo.png";
+          }
+
+          if (hasCoords) {
+            setMarker(latValue, lngValue);
+          }
+
+          renderProductos(productos);
+
+          if (totalEl) {
+            totalEl.textContent = String(productos.length).padStart(2, "0");
+          }
+
+          if (precioEl && productos.length) {
+            const sum = productos.reduce(
+              (acc, item) => acc + (Number(item.precio_unitario) || 0),
+              0
+            );
+            const avg = sum / productos.length;
+            precioEl.textContent = toMoney(avg, productos[0]?.moneda);
+          }
+        } catch (error) {
+          localStorage.removeItem("ecoris_token");
+          window.location.href = "../Sesiones/iniciosesion.html";
+        }
+      };
+
+      const guardarPerfil = async () => {
+        if (!token) {
+          return;
+        }
+        if (statusText) {
+          statusText.textContent = "Guardando...";
+        }
+
+        try {
+          const payload = {
+            municipio: municipioInput?.value || "",
+            estado: estadoInput?.value || "",
+            direccion: ubicacionInput?.value || "",
+            lat: latInput?.value || "",
+            lng: lngInput?.value || "",
+            tipo_empresa: tipoInput?.value || "",
+            tipo_material: materialInput?.value || "",
+            modalidad: modalidadInput?.value || "",
+            etiquetas: etiquetasInput?.value || "",
+          };
+
+          const response = await fetch("/api/empresa/me", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            throw new Error("No se pudo guardar");
+          }
+
+          if (statusText) {
+            statusText.textContent = "Perfil actualizado.";
+          }
+        } catch (error) {
+          if (statusText) {
+            statusText.textContent = "Error al guardar.";
+          }
+        }
+      };
+
+      if (guardarBtn) {
+        guardarBtn.addEventListener("click", guardarPerfil);
+      }
+
+      if (ubicacionInput) {
+        ubicacionInput.addEventListener("input", handleDireccionInput);
+      }
+
+      const setMarker = (lat, lng) => {
+        if (!mapInstance) {
+          return;
+        }
+        if (!mapMarker) {
+          mapMarker = L.marker([lat, lng]).addTo(mapInstance);
+        } else {
+          mapMarker.setLatLng([lat, lng]);
+        }
+        mapInstance.setView([lat, lng], mapInstance.getZoom(), {
+          animate: false,
+        });
+      };
+
+      const initMap = () => {
+        if (!mapContainer || mapInstance || typeof L === "undefined") {
+          return;
+        }
+        const streetLayer = L.tileLayer(
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          {
+            maxZoom: 19,
+            updateWhenIdle: true,
+            updateWhenZooming: false,
+            keepBuffer: 4,
+            attribution: "&copy; OpenStreetMap",
+          }
+        );
+        const satelliteLayer = L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          {
+            maxZoom: 19,
+            updateWhenIdle: true,
+            updateWhenZooming: false,
+            keepBuffer: 4,
+            attribution: "Tiles &copy; Esri",
+          }
+        );
+        const satelliteLabels = L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+          {
+            maxZoom: 19,
+            updateWhenIdle: true,
+            updateWhenZooming: false,
+            keepBuffer: 4,
+            attribution: "Labels &copy; Esri",
+          }
+        );
+        const satelliteGroup = L.layerGroup([
+          satelliteLayer,
+          satelliteLabels,
+        ]);
+        mapInstance = L.map(mapContainer, {
+          preferCanvas: true,
+          zoomSnap: 0.25,
+          zoomDelta: 0.5,
+          wheelPxPerZoomLevel: 120,
+          inertiaDeceleration: 2200,
+          inertiaMaxSpeed: 1500,
+          layers: [streetLayer],
+        }).setView([17.9894, -92.9475], 12);
+        L.control
+          .layers({ Calles: streetLayer, Satelite: satelliteGroup }, null, {
+            position: "bottomright",
+          })
+          .addTo(mapInstance);
+        const showTileError = () => {
+          if (mapContainer.querySelector(".map-error")) {
+            return;
+          }
+          const notice = document.createElement("div");
+          notice.className = "map-error";
+          notice.textContent = "No se pudieron cargar los mapas. Revisa tu conexion o firewall.";
+          notice.style.cssText =
+            "position:absolute;left:12px;bottom:12px;background:#ffffffd9;border:1px solid #e5e0d6;border-radius:10px;padding:6px 10px;font-size:11px;color:#6d7470;z-index:500;";
+          mapContainer.appendChild(notice);
+        };
+        streetLayer.on("tileerror", showTileError);
+        satelliteLayer.on("tileerror", showTileError);
+        mapInstance.whenReady(() => {
+          mapInstance.invalidateSize();
+        });
+        mapInstance.on("click", (event) => {
+          const { lat, lng } = event.latlng;
+          if (latInput) latInput.value = lat.toFixed(6);
+          if (lngInput) lngInput.value = lng.toFixed(6);
+          setMarker(lat, lng);
+        });
+      };
+
+      if (latInput && lngInput) {
+        const syncMarker = () => {
+          const lat = Number(latInput.value);
+          const lng = Number(lngInput.value);
+          if (
+            Number.isFinite(lat) &&
+            Number.isFinite(lng) &&
+            (Math.abs(lat) > 0.0001 || Math.abs(lng) > 0.0001)
+          ) {
+            setMarker(lat, lng);
+          }
+        };
+        latInput.addEventListener("change", syncMarker);
+        lngInput.addEventListener("change", syncMarker);
+      }
+
+      const subirLogo = async () => {
+        if (!token || !logoInput?.files?.length) {
+          if (logoStatus) {
+            logoStatus.textContent = "Selecciona una imagen primero.";
+          }
+          return;
+        }
+
+        if (logoStatus) {
+          logoStatus.textContent = "Subiendo logo...";
+        }
+
+        try {
+          const formData = new FormData();
+          formData.append("logo", logoInput.files[0]);
+
+          const response = await fetch("/api/empresa/logo", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || "No se pudo subir el logo.");
+          }
+
+          if (logoPreview) {
+            logoPreview.src = data.foto_url;
+          }
+          if (logoStatus) {
+            logoStatus.textContent = "Logo actualizado.";
+          }
+          if (logoInput) {
+            logoInput.value = "";
+          }
+        } catch (error) {
+          if (logoStatus) {
+            logoStatus.textContent = error?.message || "Error al subir el logo.";
+          }
+        }
+      };
+
+      if (logoButton) {
+        logoButton.addEventListener("click", subirLogo);
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("ecoris_token");
+          localStorage.removeItem("ecoris_user");
+          window.location.href = "../Sesiones/iniciosesion.html";
+        });
+      }
+
+      initMap();
+      loadPerfil();
+      loadEmpresaNotificaciones();
+    </script>
+  </body>
+</html>

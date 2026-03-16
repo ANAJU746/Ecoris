@@ -1,0 +1,6 @@
+ALTER TABLE empresa
+  ADD COLUMN estado VARCHAR(100) NULL AFTER municipio,
+  ADD COLUMN precio_min DECIMAL(10, 2) NULL AFTER estado,
+  ADD COLUMN precio_max DECIMAL(10, 2) NULL AFTER precio_min,
+  ADD COLUMN lat DECIMAL(10, 7) NULL AFTER precio_max,
+  ADD COLUMN lng DECIMAL(10, 7) NULL AFTER lat;

@@ -1,0 +1,3 @@
+ALTER TABLE empresa
+  ADD COLUMN foto_url VARCHAR(255) NULL AFTER lng,
+  ADD COLUMN etiquetas VARCHAR(255) NULL AFTER foto_url;

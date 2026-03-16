@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Ecoris | Registro</title>
+		<link rel="icon" href="../Logo.png" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&family=Bebas+Neue&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="../vendor/leaflet/leaflet.css" />
+		<link rel="stylesheet" href="../style.css" />
+	</head>
+	<body>
+		<div class="empresa-page">
+			<header class="empresa-header">
+				<div class="brand">
+					<div>
+						<div class="logo">
+							<span class="logo-badge">
+								<img class="logo-image" src="../Logo.png" alt="Ecoris" />
+							</span>
+							<span class="logo-text">Ecoris</span>
+						</div>
+						<p class="tagline">Registro para empresas y clientes</p>
+					</div>
+					<div class="brand-actions">
+						<a class="btn btn-ghost" href="../index.html">Volver al mapa</a>
+					</div>
+				</div>
+			</header>
+			<main class="empresa-main">
+				<section class="empresa-form-panel">
+					<form class="empresa-stack" id="registro-form" action="#" method="post">
+						<div class="form-section">
+							<div class="section-title">Crea tu cuenta</div>
+							<div class="role-toggle">
+								<label class="role-option">
+									<input
+										type="radio"
+										name="tipo"
+										value="empresa"
+										checked
+									/>
+									<span>Empresa</span>
+								</label>
+								<label class="role-option">
+									<input type="radio" name="tipo" value="cliente" />
+									<span>Cliente</span>
+								</label>
+							</div>
+							<div class="form-grid">
+								<div class="field">
+									<label for="nombre">Nombre</label>
+									<input
+										class="input"
+										id="nombre"
+										name="nombre"
+										type="text"
+										placeholder="Nombre completo o empresa"
+										required
+									/>
+								</div>
+								<div class="field">
+									<label for="correo">Correo</label>
+									<input
+										class="input"
+										id="correo"
+										name="correo"
+										type="email"
+										placeholder="correo@dominio.com"
+										required
+									/>
+								</div>
+								<div class="field">
+									<label for="telefono">Telefono</label>
+									<input
+										class="input"
+										id="telefono"
+										name="telefono"
+										type="tel"
+										placeholder="9930000000"
+									/>
+								</div>
+								<div class="field full empresa-only" id="empresa-ubicacion">
+									<label for="direccion">Ubicacion escrita</label>
+									<input
+										class="input"
+										id="direccion"
+										name="direccion"
+										type="text"
+										placeholder="Ej. Parque Industrial, Villahermosa"
+										list="direccion-sugerencias"
+									/>
+									<datalist id="direccion-sugerencias"></datalist>
+								</div>
+								<div class="field empresa-only">
+									<label for="municipio">Municipio</label>
+									<input
+										class="input"
+										id="municipio"
+										name="municipio"
+										type="text"
+										placeholder="Municipio"
+									/>
+								</div>
+								<div class="field empresa-only">
+									<label for="estado">Estado</label>
+									<input
+										class="input"
+										id="estado"
+										name="estado"
+										type="text"
+										placeholder="Estado"
+									/>
+								</div>
+								<div class="field empresa-only">
+									<label for="lat">Latitud</label>
+									<input
+										class="input"
+										id="lat"
+										name="lat"
+										type="text"
+										placeholder="Ej. 17.9894"
+									/>
+								</div>
+								<div class="field empresa-only">
+									<label for="lng">Longitud</label>
+									<input
+										class="input"
+										id="lng"
+										name="lng"
+										type="text"
+										placeholder="Ej. -92.9475"
+									/>
+								</div>
+								<div class="field full empresa-only">
+									<label>Ubicacion en mapa</label>
+									<div class="form-map" id="registro-map"></div>
+									<p class="helper-text">
+										Haz clic en el mapa para guardar la ubicacion.
+									</p>
+								</div>
+								<div class="field full">
+									<label for="contrasena">Contrasena</label>
+									<input
+										class="input"
+										id="contrasena"
+										name="contrasena"
+										type="password"
+										placeholder="Crea una contrasena segura"
+										required
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="form-actions">
+							<button class="btn" type="submit">Crear cuenta</button>
+							<a class="btn btn-ghost" href="iniciosesion.html">Ya tengo cuenta</a>
+							<p class="form-status" role="status"></p>
+						</div>
+					</form>
+				</section>
+				<aside class="empresa-side">
+					<div class="side-card animate-in role-panel" id="role-panel">
+						<div class="section-title" id="role-title">Que sigue</div>
+						<ul class="tips-list" id="role-tips">
+							<li>Registra tu correo corporativo.</li>
+							<li>Asocia tu cuenta con tu empresa.</li>
+							<li>Publica residuos desde el panel.</li>
+						</ul>
+					</div>
+				</aside>
+			</main>
+		</div>
+		<script src="../vendor/leaflet/leaflet.js"></script>
+		<script>
+			const form = document.getElementById("registro-form");
+			const statusText = document.querySelector(".form-status");
+			const empresaFields = document.querySelectorAll(".empresa-only");
+			const roleInputs = document.querySelectorAll("input[name='tipo']");
+			const rolePanel = document.getElementById("role-panel");
+			const roleTitle = document.getElementById("role-title");
+			const roleTips = document.getElementById("role-tips");
+			const direccionInput = document.getElementById("direccion");
+			const direccionList = document.getElementById("direccion-sugerencias");
+			const latInput = document.getElementById("lat");
+			const lngInput = document.getElementById("lng");
+			const mapContainer = document.getElementById("registro-map");
+			let lastGeocodeResults = [];
+
+						const fetchGeocode = async (query) => {
+							const encoded = encodeURIComponent(query);
+							const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encoded}`;
+							const response = await fetch(url, { headers: { Accept: "application/json" } });
+							if (!response.ok) {
+								return [];
+							}
+							return response.json();
+						};
+
+						const updateSuggestions = (results) => {
+							if (!direccionList) {
+								return;
+							}
+							direccionList.innerHTML = "";
+							results.forEach((item) => {
+								const option = document.createElement("option");
+								option.value = item.display_name;
+								direccionList.appendChild(option);
+							});
+						};
+
+						const setCoordsFromResult = (result) => {
+							if (!result) {
+								return;
+							}
+							const lat = Number(result.lat);
+							const lng = Number(result.lon);
+							if (Number.isFinite(lat) && Number.isFinite(lng)) {
+								if (latInput) latInput.value = lat.toFixed(6);
+								if (lngInput) lngInput.value = lng.toFixed(6);
+								setMarker(lat, lng);
+							}
+						};
+
+						const handleDireccionInput = (() => {
+							let timeoutId = null;
+							return () => {
+								const query = direccionInput?.value?.trim();
+								if (!query || query.length < 4) {
+									return;
+								}
+								if (timeoutId) {
+									clearTimeout(timeoutId);
+								}
+								timeoutId = setTimeout(async () => {
+									try {
+										lastGeocodeResults = await fetchGeocode(query);
+										updateSuggestions(lastGeocodeResults);
+										setCoordsFromResult(lastGeocodeResults[0]);
+									} catch (error) {
+										// Ignore lookup failures.
+									}
+								}, 500);
+							};
+						})();
+			let mapInstance = null;
+			let mapMarker = null;
+
+			const roleContent = {
+				empresa: {
+					title: "Que sigue",
+					tips: [
+						"Completa el perfil de tu empresa.",
+						"Publica residuos desde el panel.",
+						"Actualiza precios cuando cambie el volumen.",
+					],
+				},
+				cliente: {
+					title: "Como empezar",
+					tips: [
+						"Busca materiales por zona.",
+						"Guarda empresas favoritas.",
+						"Recibe alertas de nuevos residuos.",
+					],
+				},
+			};
+
+			const setMarker = (lat, lng) => {
+				if (!mapInstance) {
+					return;
+				}
+				if (!mapMarker) {
+					mapMarker = L.marker([lat, lng]).addTo(mapInstance);
+				} else {
+					mapMarker.setLatLng([lat, lng]);
+				}
+				mapInstance.setView([lat, lng], mapInstance.getZoom(), {
+					animate: false,
+				});
+			};
+
+			const initMap = () => {
+				if (!mapContainer || mapInstance || typeof L === "undefined") {
+					return;
+				}
+				const streetLayer = L.tileLayer(
+					"/api/tiles/esri/{z}/{x}/{y}.png",
+					{
+						maxZoom: 19,
+						updateWhenIdle: true,
+						updateWhenZooming: false,
+						keepBuffer: 4,
+						attribution: "Tiles &copy; Esri",
+					}
+				);
+				const osmLayer = L.tileLayer(
+					"/api/tiles/osm/{z}/{x}/{y}.png",
+					{
+						maxZoom: 19,
+						updateWhenIdle: true,
+						updateWhenZooming: false,
+						keepBuffer: 4,
+						attribution: "&copy; OpenStreetMap",
+					}
+				);
+				const satelliteLayer = L.tileLayer(
+					"/api/tiles/esri_sat/{z}/{x}/{y}.png",
+					{
+						maxZoom: 19,
+						updateWhenIdle: true,
+						updateWhenZooming: false,
+						keepBuffer: 4,
+						attribution: "Tiles &copy; Esri",
+					}
+				);
+				const satelliteLabels = L.tileLayer(
+					"/api/tiles/esri_labels/{z}/{x}/{y}.png",
+					{
+						maxZoom: 19,
+						updateWhenIdle: true,
+						updateWhenZooming: false,
+						keepBuffer: 4,
+						attribution: "Labels &copy; Esri",
+					}
+				);
+				const satelliteGroup = L.layerGroup([
+					satelliteLayer,
+					satelliteLabels,
+				]);
+				mapInstance = L.map(mapContainer, {
+					preferCanvas: true,
+					zoomSnap: 0.25,
+					zoomDelta: 0.5,
+					wheelPxPerZoomLevel: 120,
+					inertiaDeceleration: 2200,
+					inertiaMaxSpeed: 1500,
+					layers: [streetLayer],
+				}).setView([17.9894, -92.9475], 12);
+				L.control
+					.layers(
+						{ "Calles (Esri)": streetLayer, OSM: osmLayer, Satelite: satelliteGroup },
+						null,
+						{
+							position: "bottomright",
+						}
+					)
+					.addTo(mapInstance);
+				mapInstance.whenReady(() => {
+					mapInstance.invalidateSize();
+				});
+				mapInstance.on("click", (event) => {
+					const { lat, lng } = event.latlng;
+					if (latInput) latInput.value = lat.toFixed(6);
+					if (lngInput) lngInput.value = lng.toFixed(6);
+					setMarker(lat, lng);
+				});
+			};
+
+			const updateRole = () => {
+				const selected = document.querySelector("input[name='tipo']:checked");
+				if (!selected) {
+					return;
+				}
+				empresaFields.forEach((field) => {
+					field.classList.toggle(
+						"is-hidden",
+						selected.value !== "empresa"
+					);
+				});
+				if (selected.value === "empresa") {
+					initMap();
+					if (mapInstance) {
+						setTimeout(() => mapInstance.invalidateSize(), 0);
+					}
+				}
+				if (rolePanel && roleTitle && roleTips) {
+					const content = roleContent[selected.value] || roleContent.empresa;
+					rolePanel.classList.add("is-swapping");
+					setTimeout(() => {
+						roleTitle.textContent = content.title;
+						roleTips.innerHTML = "";
+						content.tips.forEach((tip) => {
+							const li = document.createElement("li");
+							li.textContent = tip;
+							roleTips.appendChild(li);
+						});
+						rolePanel.classList.remove("is-swapping");
+					}, 150);
+				}
+			};
+
+			if (latInput && lngInput) {
+				const syncMarker = () => {
+					const lat = Number(latInput.value);
+					const lng = Number(lngInput.value);
+					if (Number.isFinite(lat) && Number.isFinite(lng)) {
+						setMarker(lat, lng);
+					}
+				};
+				latInput.addEventListener("change", syncMarker);
+				lngInput.addEventListener("change", syncMarker);
+			}
+
+			roleInputs.forEach((input) => {
+				input.addEventListener("change", updateRole);
+			});
+
+			updateRole();
+
+			if (direccionInput) {
+				direccionInput.addEventListener("input", handleDireccionInput);
+			}
+
+			if (form) {
+				form.addEventListener("submit", async (event) => {
+					event.preventDefault();
+					if (statusText) {
+						statusText.textContent = "Registrando...";
+					}
+
+					try {
+						const formData = new FormData(form);
+						const payload = {
+							tipo: formData.get("tipo") || "empresa",
+							nombre: formData.get("nombre") || "",
+							correo: formData.get("correo") || "",
+							telefono: formData.get("telefono") || "",
+							municipio: formData.get("municipio") || "",
+							estado: formData.get("estado") || "",
+							direccion: formData.get("direccion") || "",
+							lat: formData.get("lat") || "",
+							lng: formData.get("lng") || "",
+							contrasena: formData.get("contrasena") || "",
+						};
+
+						const response = await fetch("/api/registro", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify(payload),
+						});
+
+						let data = {};
+						const contentType = response.headers.get("content-type") || "";
+						if (contentType.includes("application/json")) {
+							data = await response.json();
+						}
+
+						if (!response.ok) {
+							throw new Error(data.error || "No se pudo registrar la cuenta.");
+						}
+
+						form.reset();
+						if (statusText) {
+							statusText.textContent = "Registro exitoso.";
+						}
+					} catch (error) {
+						if (statusText) {
+							statusText.textContent =
+								error?.message || "Error al registrar. Intenta de nuevo.";
+						}
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

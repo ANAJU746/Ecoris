@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Ecoris | Intermediario de reutilizacion</title>
+		<link rel="icon" href="Logo.png" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&family=Bebas+Neue&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+		<link rel="stylesheet" href="style.css" />
+		<script src="vendor/leaflet/leaflet.js" defer></script>
+		<script src="app.js" defer></script>
+	</head>
+	<body>
+		<div class="page-loader" id="page-loader" aria-hidden="true">
+			<div class="loader-card">
+				<div class="loader-logo">
+					<img src="Logo.png" alt="Ecoris" />
+				</div>
+				<div class="loader-line"></div>
+				<p>Cargando experiencia sostenible...</p>
+			</div>
+		</div>
+		<div class="page">
+			<header>
+				<div class="brand">
+					<div>
+						<div class="logo">
+							<span class="logo-badge">
+								<img class="logo-image" src="Logo.png" alt="Ecoris" />
+							</span>
+							<span class="logo-text">Ecoris</span>
+						</div>
+						<p class="tagline">
+							Intermediario para vender productos reutilizables y residuos
+							valorizables
+						</p>
+					</div>
+					<div class="brand-actions">
+						<a class="btn btn-ghost auth-only" href="Sesiones/registro.html">Registrarse</a>
+						<a class="btn btn-ghost auth-only" href="Sesiones/iniciosesion.html">Iniciar sesion</a>
+						<a class="btn btn-secondary" id="publish-link" href="Empresas/empresa.html" style="display: none;">Publicar material</a>
+						<a class="btn btn-ghost profile-only" id="profile-link" href="#">Mi perfil</a>
+						<button class="btn btn-ghost profile-only" id="logout-button" type="button">
+							Cerrar sesion
+						</button>
+						<button class="cart-button" id="cart-button" type="button" aria-label="Carrito">
+							<svg viewBox="0 0 24 24" aria-hidden="true">
+								<path
+									d="M7 6h14l-1.5 8.5a2 2 0 0 1-2 1.5H9a2 2 0 0 1-2-1.5L5 3H2V1h4l1 5zm2 16a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm8 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+								/>
+							</svg>
+							<span class="cart-badge" id="cart-badge">0</span>
+						</button>
+						<div class="user-chip" id="user-chip">
+							<img class="user-avatar" id="user-avatar" src="Logo.png" alt="Usuario" />
+							<div>
+								<p class="user-name" id="user-name">Invitado</p>
+								<p class="user-role" id="user-role">Visitante</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="search-bar">
+					<input
+						class="input"
+						id="search-input"
+						type="search"
+						placeholder="Buscar empresas, materiales o ubicaciones"
+						aria-label="Buscar"
+					/>
+					<div class="price-group">
+                        
+						<input
+							class="input"
+							id="price-min"
+							type="text"
+							placeholder="Precio minimo"
+							aria-label="Precio minimo"
+						/>
+						<input
+							class="input"
+							id="price-max"
+							type="text"
+							placeholder="Precio maximo"
+							aria-label="Precio maximo"
+						/>
+					</div>
+					<button class="btn" id="filter-button" type="button">Filtrar</button>
+				</div>
+			</header>
+			<main>
+				<section class="map-panel animate-in">
+					<div class="map-header">
+						<h2>Mapa activo de ubicaciones</h2>
+						<span class="tag">Actualizado hoy</span>
+					</div>
+					<div class="map-canvas">
+						<div id="map" aria-label="Mapa de ubicaciones"></div>
+						<div class="map-legend">
+							Zona industrial + centros de recoleccion<br />
+							3 empresas activas
+						</div>
+					</div>
+				</section>
+				<section class="list-panel animate-in">
+					<h2>Empresas disponibles</h2>
+					<div class="filter-pills">
+						<span class="pill">Residuos plasticos</span>
+						<span class="pill">Metales y chatarra</span>
+						<span class="pill">Organicos</span>
+						<span class="pill">Con entrega inmediata</span>
+					</div>
+					<div class="company-list" id="company-list"></div>
+					<template id="company-card-template">
+						<article class="company-card">
+							<div class="company-main">
+								<div class="company-photo">
+									<img class="company-photo-img" alt="" />
+								</div>
+								<div class="company-content">
+									<div class="company-header">
+										<div class="company-name"></div>
+									</div>
+									<div class="company-meta">
+										<span class="company-location"></span>
+										<span class="company-material"></span>
+										<span class="company-state"></span>
+									</div>
+									<div class="company-tags">
+										<div class="mode-tags"></div>
+									</div>
+								</div>
+							</div>
+							<div class="company-actions">
+								<a class="btn btn-secondary view-more" href="#">Ver mas</a>
+							</div>
+						</article>
+					</template>
+					<p class="footer-note">
+						Precios estimados por tonelada. Contacto directo disponible al
+						seleccionar una empresa.
+					</p>
+				</section>
+			</main>
+			<section class="recommendations-section animate-in">
+				<div class="recommendations-header">
+					<div>
+						<h2>Recomendaciones</h2>
+						<p>Materiales sugeridos segun lo que publican las empresas.</p>
+					</div>
+					<span class="tag">Actualizado hoy</span>
+				</div>
+				<div class="recommendations-grid" id="recommendations-list"></div>
+			</section>
+		</div>
+		<div class="company-detail" id="company-detail" aria-hidden="true">
+			<div
+				class="company-detail-card"
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby="detail-name"
+			>
+				<div class="detail-header">
+					<div class="detail-photo">
+						<img id="detail-photo" src="Logo.png" alt="Empresa seleccionada" />
+					</div>
+					<div class="detail-headings">
+						<p class="detail-label">Perfil de empresa</p>
+						<h3 id="detail-name">Empresa</h3>
+						<p class="detail-subtitle" id="detail-subtitle">Ubicacion por definir</p>
+					</div>
+					<button class="detail-close" id="detail-close" type="button" aria-label="Cerrar detalle">
+						Cerrar
+					</button>
+				</div>
+				<div class="detail-grid">
+					<div>
+						<span>Ubicacion</span>
+						<p id="detail-location">-</p>
+					</div>
+					<div>
+						<span>Estado</span>
+						<p id="detail-region">-</p>
+					</div>
+					<div>
+						<span>Tipo</span>
+						<p id="detail-type">-</p>
+					</div>
+					<div>
+						<span>Material</span>
+						<p id="detail-material">-</p>
+					</div>
+					<div>
+						<span>Modalidad</span>
+						<p id="detail-mode">-</p>
+					</div>
+					<div>
+						<span>Disponibilidad</span>
+						<p id="detail-availability">-</p>
+					</div>
+					<div>
+						<span>Precio</span>
+						<p id="detail-price">-</p>
+					</div>
+				</div>
+				<div>
+					<span class="detail-label">Etiquetas</span>
+					<div class="detail-tags" id="detail-tags"></div>
+				</div>
+				<div class="detail-actions">
+					<a class="btn btn-secondary" id="detail-goto" href="#">Ir a</a>
+					<button class="btn" id="detail-contact" type="button">Contactar empresa</button>
+				</div>
+			</div>
+		</div>
+		<div class="cart-panel" id="cart-panel" aria-hidden="true">
+			<div class="cart-header">
+				<h3>Carrito</h3>
+				<button class="btn btn-ghost" id="cart-close" type="button">Cerrar</button>
+			</div>
+			<div class="cart-items" id="cart-items"></div>
+			<div class="cart-footer">
+				<p id="cart-empty">Aun no hay productos.</p>
+				<div class="cart-actions">
+					<button class="btn btn-ghost" id="cart-view" type="button">Ver carrito</button>
+					<button class="btn" id="cart-checkout" type="button">Solicitar pedido</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			window.addEventListener("load", () => {
+				document.body.classList.add("is-ready");
+				const loader = document.getElementById("page-loader");
+				if (loader) {
+					loader.classList.add("is-hidden");
+				}
+			});
+		</script>
+	</body>
+</html>

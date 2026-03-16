@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ecoris | Detalle de producto</title>
+    <link rel="icon" href="../Logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <div class="empresa-page">
+      <header class="empresa-header">
+        <div class="brand">
+          <div>
+            <div class="logo">
+              <span class="logo-badge">
+                <img class="logo-image" src="../Logo.png" alt="Ecoris" />
+              </span>
+              <span class="logo-text">Ecoris</span>
+            </div>
+            <p class="tagline" id="producto-tagline">Detalle de producto</p>
+          </div>
+          <div class="brand-actions">
+            <a class="btn btn-ghost" id="back-link" href="empresa.html">Volver a empresa</a>
+          </div>
+        </div>
+      </header>
+      <main class="producto-main">
+        <section class="producto-card">
+          <div class="producto-media">
+            <img id="producto-foto" src="../Logo.png" alt="Producto" />
+          </div>
+          <div class="producto-info">
+            <div class="section-title" id="producto-nombre">Producto</div>
+            <p class="producto-sub" id="producto-categoria">-</p>
+            <div class="producto-price" id="producto-precio">-</div>
+            <div class="producto-meta-grid">
+              <div class="producto-meta-item">
+                <span class="meta-label">Cantidad</span>
+                <span id="producto-cantidad">-</span>
+              </div>
+              <div class="producto-meta-item">
+                <span class="meta-label">Estado</span>
+                <span id="producto-estado">-</span>
+              </div>
+              <div class="producto-meta-item">
+                <span class="meta-label">Modalidad</span>
+                <span id="producto-modalidad">-</span>
+              </div>
+              <div class="producto-meta-item">
+                <span class="meta-label">Negociable</span>
+                <span id="producto-negociable">-</span>
+              </div>
+              <div class="producto-meta-item">
+                <span class="meta-label">Ubicacion</span>
+                <span id="producto-ubicacion">-</span>
+              </div>
+              <div class="producto-meta-item">
+                <span class="meta-label">Disponible desde</span>
+                <span id="producto-disponible">-</span>
+              </div>
+              <div class="producto-meta-item">
+                <span class="meta-label">Horario de retiro</span>
+                <span id="producto-horario">-</span>
+              </div>
+              <div class="producto-meta-item">
+                <span class="meta-label">Recoleccion</span>
+                <span id="producto-recoleccion">-</span>
+              </div>
+            </div>
+            <div class="producto-tags" id="producto-etiquetas"></div>
+            <p class="producto-desc" id="producto-descripcion">-</p>
+          </div>
+        </section>
+        <aside class="producto-side">
+          <div class="side-card animate-in">
+            <div class="section-title">Empresa</div>
+            <div class="empresa-chip">
+              <img id="empresa-foto" src="../Logo.png" alt="Empresa" />
+              <div>
+                <p class="empresa-name" id="empresa-nombre">-</p>
+                <p class="empresa-location" id="empresa-ubicacion">-</p>
+              </div>
+            </div>
+            <div class="empresa-contact" id="empresa-contacto">-</div>
+            <a class="btn btn-secondary" id="empresa-link" href="empresa.html">Ver empresa</a>
+          </div>
+        </aside>
+      </main>
+    </div>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const productoId = params.get("id");
+      const empresaParam = params.get("empresa");
+      const fotoParam = params.get("foto");
+
+      const backLink = document.getElementById("back-link");
+      const productoNombre = document.getElementById("producto-nombre");
+      const productoCategoria = document.getElementById("producto-categoria");
+      const productoPrecio = document.getElementById("producto-precio");
+      const productoCantidad = document.getElementById("producto-cantidad");
+      const productoEstado = document.getElementById("producto-estado");
+      const productoModalidad = document.getElementById("producto-modalidad");
+      const productoNegociable = document.getElementById("producto-negociable");
+      const productoUbicacion = document.getElementById("producto-ubicacion");
+      const productoDisponible = document.getElementById("producto-disponible");
+      const productoHorario = document.getElementById("producto-horario");
+      const productoRecoleccion = document.getElementById("producto-recoleccion");
+      const productoEtiquetas = document.getElementById("producto-etiquetas");
+      const productoDescripcion = document.getElementById("producto-descripcion");
+      const productoFoto = document.getElementById("producto-foto");
+      const empresaFoto = document.getElementById("empresa-foto");
+      const empresaNombre = document.getElementById("empresa-nombre");
+      const empresaUbicacion = document.getElementById("empresa-ubicacion");
+      const empresaContacto = document.getElementById("empresa-contacto");
+      const empresaLink = document.getElementById("empresa-link");
+
+      const normalizeImageUrl = (value) => {
+        if (!value) {
+          return "../Logo.png";
+        }
+        const text = String(value);
+        if (text.startsWith("http") || text.startsWith("/")) {
+          return text;
+        }
+        return `/uploads/${text}`;
+      };
+
+      const toMoney = (value, moneda) => {
+        if (value === null || value === undefined || value === "") {
+          return "-";
+        }
+        const parsed = Number(value);
+        if (Number.isNaN(parsed)) {
+          return "-";
+        }
+        return `$${parsed} ${moneda || ""}`.trim();
+      };
+
+      const getPriceLabel = (producto) => {
+        const unit = toMoney(producto.precio_unitario, producto.moneda);
+        if (unit !== "-") {
+          return unit;
+        }
+        const min = producto.precio_min ?? null;
+        const max = producto.precio_max ?? null;
+        if (min === null && max === null) {
+          return "-";
+        }
+        if (min !== null && max !== null) {
+          return `$${min} - $${max} ${producto.moneda || ""}`.trim();
+        }
+        return `$${min ?? max} ${producto.moneda || ""}`.trim();
+      };
+
+      const formatDate = (value) => {
+        if (!value) {
+          return "-";
+        }
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return String(value);
+        }
+        return date.toLocaleDateString("es-MX");
+      };
+
+      const renderTags = (value) => {
+        if (!productoEtiquetas) {
+          return;
+        }
+        productoEtiquetas.innerHTML = "";
+        const tags = String(value || "")
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+        if (!tags.length) {
+          const empty = document.createElement("span");
+          empty.className = "tag";
+          empty.textContent = "Sin etiquetas";
+          productoEtiquetas.appendChild(empty);
+          return;
+        }
+        tags.forEach((tag) => {
+          const chip = document.createElement("span");
+          chip.className = "tag";
+          chip.textContent = tag;
+          productoEtiquetas.appendChild(chip);
+        });
+      };
+
+      const loadProducto = async () => {
+        if (!productoId) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/productos/${productoId}`);
+          if (!response.ok) {
+            throw new Error("No se pudo cargar el producto.");
+          }
+          const data = await response.json();
+          const producto = data.producto || {};
+          const empresa = data.empresa || null;
+
+          if (productoNombre) productoNombre.textContent = producto.nombre_material || "Producto";
+          if (productoCategoria) {
+            productoCategoria.textContent = [producto.categoria, producto.tipo_residuo]
+              .filter(Boolean)
+              .join(" · ") || "-";
+          }
+          if (productoPrecio) productoPrecio.textContent = getPriceLabel(producto);
+          if (productoCantidad) {
+            const cantidad = producto.cantidad ? `${producto.cantidad} ${producto.unidad || ""}` : "-";
+            productoCantidad.textContent = cantidad;
+          }
+          if (productoEstado) productoEstado.textContent = producto.estado_material || "-";
+          if (productoModalidad) productoModalidad.textContent = producto.modalidad || "-";
+          if (productoNegociable) productoNegociable.textContent = producto.negociable || "-";
+          if (productoUbicacion) productoUbicacion.textContent = producto.ubicacion || "-";
+          if (productoDisponible) productoDisponible.textContent = formatDate(producto.disponible_desde);
+          if (productoHorario) productoHorario.textContent = producto.horario_retiro || "-";
+          if (productoRecoleccion) productoRecoleccion.textContent = producto.recoleccion || "-";
+          if (productoDescripcion) productoDescripcion.textContent = producto.descripcion || "Sin descripcion.";
+          if (productoFoto) {
+            const fotoProducto = producto.foto_url || fotoParam || "";
+            productoFoto.src = normalizeImageUrl(fotoProducto);
+            productoFoto.alt = producto.nombre_material || "Producto";
+            productoFoto.addEventListener("error", () => {
+              productoFoto.src = "../Logo.png";
+            });
+          }
+          renderTags(producto.etiquetas);
+
+          if (empresa) {
+            if (empresaNombre) empresaNombre.textContent = empresa.nombre_empresa || "Empresa";
+            if (empresaUbicacion) {
+              empresaUbicacion.textContent = [empresa.municipio, empresa.estado]
+                .filter(Boolean)
+                .join(", ") || "-";
+            }
+            if (empresaContacto) {
+              const contacto = [empresa.telefono, empresa.correo].filter(Boolean).join(" · ");
+              empresaContacto.textContent = contacto || "-";
+            }
+            if (empresaFoto) {
+              empresaFoto.src = normalizeImageUrl(empresa.foto_url);
+              empresaFoto.addEventListener("error", () => {
+                empresaFoto.src = "../Logo.png";
+              });
+            }
+            if (empresaLink) {
+              empresaLink.href = `empresa.html?id=${empresa.id_empresa}`;
+            }
+            if (backLink) {
+              backLink.href = `empresa.html?id=${empresa.id_empresa}`;
+            }
+          } else if (empresaParam && backLink) {
+            backLink.href = `empresa.html?id=${empresaParam}`;
+          }
+        } catch (error) {
+          if (productoNombre) {
+            productoNombre.textContent = "No disponible";
+          }
+        }
+      };
+
+      loadProducto();
+    </script>
+  </body>
+</html>

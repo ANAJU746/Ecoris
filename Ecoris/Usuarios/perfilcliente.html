@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ecoris | Perfil de cliente</title>
+    <link rel="icon" href="../Logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@300;400;600&family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <div class="empresa-page">
+      <header class="empresa-header">
+        <div class="brand">
+          <div>
+            <div class="logo">
+              <span class="logo-badge">
+                <img class="logo-image" src="../Logo.png" alt="Ecoris" />
+              </span>
+              <span class="logo-text">Ecoris</span>
+            </div>
+            <p class="tagline">Perfil de cliente</p>
+          </div>
+          <div class="brand-actions">
+            <a class="btn btn-ghost" href="../index.html">Volver al mapa</a>
+          </div>
+        </div>
+      </header>
+      <main class="empresa-main profile-layout profile-layout--cliente">
+        <aside class="profile-sidebar">
+          <div class="profile-sidebar-brand">
+            <span class="profile-sidebar-logo">Ec</span>
+            <div>
+              <p class="profile-sidebar-eyebrow">Cuenta</p>
+              <p>Cliente</p>
+            </div>
+          </div>
+          <button class="profile-nav-item is-active" type="button">
+            <span aria-hidden="true">●</span>
+            <span>Perfil</span>
+          </button>
+          <button class="profile-nav-item" type="button">
+            <span aria-hidden="true">♥</span>
+            <span>Favoritos</span>
+          </button>
+          <button class="profile-nav-item" type="button">
+            <span aria-hidden="true">🛒</span>
+            <span>Carrito</span>
+          </button>
+          <button class="profile-nav-item" type="button">
+            <span aria-hidden="true">⚙</span>
+            <span>Preferencias</span>
+          </button>
+        </aside>
+        <section class="profile-main">
+          <div class="profile-hero-card profile-hero-card--cliente animate-in">
+            <div class="profile-hero-main">
+              <p class="profile-hero-eyebrow">Cliente activo</p>
+              <h1 class="profile-hero-title" id="cliente-hero-nombre">Perfil de cliente</h1>
+              <p class="profile-hero-text">
+                Personaliza tus datos para que las empresas te reconozcan y aceleren las negociaciones.
+              </p>
+              <div class="profile-hero-actions">
+                <a class="btn btn-secondary" href="../index.html">Buscar materiales</a>
+                <button class="btn btn-ghost" id="logout-cliente" type="button">Cerrar sesion</button>
+              </div>
+            </div>
+            <div class="profile-avatar-card">
+              <img id="cliente-foto-preview" src="../Logo.png" alt="Foto de perfil" />
+              <div class="cliente-photo-info">
+                <p class="eyebrow">Tu cuenta</p>
+                <p class="cliente-photo-sub">
+                  Actualiza tu foto y datos para recibir respuestas mas rapidas.
+                </p>
+                <div class="cliente-photo-actions">
+                  <input class="input" id="cliente-foto-input" type="file" accept="image/*" />
+                  <button class="btn btn-secondary" id="cliente-foto-subir" type="button">
+                    Subir foto
+                  </button>
+                </div>
+                <p class="logo-status" id="cliente-foto-status" role="status"></p>
+              </div>
+            </div>
+          </div>
+          <div class="profile-panels">
+            <section class="empresa-form-panel profile-card profile-card--form">
+              <div class="form-section glimmer-card">
+                <div class="section-title">Tu informacion</div>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="cliente-nombre">Nombre</label>
+                    <input class="input" id="cliente-nombre" type="text" placeholder="Nombre" />
+                  </div>
+                  <div class="field">
+                    <label for="cliente-correo">Correo</label>
+                    <input class="input" id="cliente-correo" type="email" placeholder="correo@dominio.com" />
+                  </div>
+                  <div class="field">
+                    <label for="cliente-telefono">Telefono</label>
+                    <input class="input" id="cliente-telefono" type="tel" placeholder="Telefono" />
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="btn" id="cliente-guardar" type="button">Guardar perfil</button>
+                  <p class="form-status" id="cliente-status" role="status"></p>
+                </div>
+              </div>
+            </section>
+            <section class="profile-card profile-card--activity">
+              <div class="section-title">Recomendaciones</div>
+              <ul class="tips-list">
+                <li>Explora empresas cercanas en el mapa.</li>
+                <li>Guarda materiales de interes en tu carrito.</li>
+                <li>Contacta empresas para negociar volumen.</li>
+              </ul>
+            </section>
+          </div>
+          <section class="profile-card profile-card--notifications">
+            <div class="section-title">Tus notificaciones</div>
+            <p class="section-subtitle">
+              Sigue las respuestas de las empresas sobre tus pedidos.
+            </p>
+            <div class="notification-list" id="cliente-notificaciones"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <script>
+      const token = localStorage.getItem("ecoris_token");
+      const usuario = localStorage.getItem("ecoris_user");
+      const nombreEl = document.getElementById("cliente-nombre");
+      const correoEl = document.getElementById("cliente-correo");
+      const telefonoEl = document.getElementById("cliente-telefono");
+      const heroNombre = document.getElementById("cliente-hero-nombre");
+      const fotoPreview = document.getElementById("cliente-foto-preview");
+      const fotoInput = document.getElementById("cliente-foto-input");
+      const fotoButton = document.getElementById("cliente-foto-subir");
+      const fotoStatus = document.getElementById("cliente-foto-status");
+      const guardarBtn = document.getElementById("cliente-guardar");
+      const statusText = document.getElementById("cliente-status");
+      const logoutBtn = document.getElementById("logout-cliente");
+      const clienteNotificacionesEl = document.getElementById("cliente-notificaciones");
+
+      const loadCliente = async () => {
+        if (!token || !usuario) {
+          window.location.href = "../Sesiones/iniciosesion.html";
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/cliente/me", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!response.ok) {
+            throw new Error("No autorizado");
+          }
+          const data = await response.json();
+          const cliente = data.cliente || {};
+          if (nombreEl) nombreEl.value = cliente.nombre || "";
+          if (correoEl) correoEl.value = cliente.correo || "";
+          if (telefonoEl) telefonoEl.value = cliente.telefono || "";
+          if (heroNombre) heroNombre.textContent = cliente.nombre || "Perfil de cliente";
+          if (fotoPreview) fotoPreview.src = cliente.foto_url || "../Logo.png";
+        } catch (error) {
+          localStorage.removeItem("ecoris_user");
+          window.location.href = "../Sesiones/iniciosesion.html";
+        }
+      };
+
+      const subirFoto = async () => {
+        if (!token || !fotoInput?.files?.length) {
+          if (fotoStatus) {
+            fotoStatus.textContent = "Selecciona una imagen primero.";
+          }
+          return;
+        }
+
+        if (fotoStatus) {
+          fotoStatus.textContent = "Subiendo foto...";
+        }
+
+        try {
+          const formData = new FormData();
+          formData.append("foto", fotoInput.files[0]);
+
+          const response = await fetch("/api/cliente/foto", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || "No se pudo subir la foto.");
+          }
+
+          if (fotoPreview) {
+            fotoPreview.src = data.foto_url;
+          }
+          if (fotoStatus) {
+            fotoStatus.textContent = "Foto actualizada.";
+          }
+          if (fotoInput) {
+            fotoInput.value = "";
+          }
+
+          const stored = JSON.parse(usuario || "{}");
+          const next = {
+            ...stored,
+            foto_url: data.foto_url,
+          };
+          localStorage.setItem("ecoris_user", JSON.stringify(next));
+        } catch (error) {
+          if (fotoStatus) {
+            fotoStatus.textContent = error?.message || "Error al subir la foto.";
+          }
+        }
+      };
+
+      const guardarCliente = async () => {
+        if (!token) {
+          return;
+        }
+        if (statusText) {
+          statusText.textContent = "Guardando...";
+        }
+
+        try {
+          const payload = {
+            nombre: nombreEl?.value || "",
+            correo: correoEl?.value || "",
+            telefono: telefonoEl?.value || "",
+          };
+
+          const response = await fetch("/api/cliente/me", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || "No se pudo guardar.");
+          }
+
+          if (statusText) {
+            statusText.textContent = "Perfil actualizado.";
+          }
+
+          const stored = JSON.parse(usuario || "{}");
+          const next = {
+            ...stored,
+            nombre: payload.nombre,
+            correo: payload.correo,
+            telefono: payload.telefono,
+          };
+          localStorage.setItem("ecoris_user", JSON.stringify(next));
+        } catch (error) {
+          if (statusText) {
+            statusText.textContent = error?.message || "Error al guardar.";
+          }
+        }
+      };
+
+      const formatDateTime = (value) => {
+        if (!value) {
+          return "";
+        }
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return "";
+        }
+        return date.toLocaleString("es-MX", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        });
+      };
+
+      const renderClienteNotificaciones = (items) => {
+        if (!clienteNotificacionesEl) {
+          return;
+        }
+        clienteNotificacionesEl.innerHTML = "";
+        if (!items?.length) {
+          const empty = document.createElement("div");
+          empty.className = "notification-empty";
+          empty.textContent = "Aun no tienes notificaciones.";
+          clienteNotificacionesEl.appendChild(empty);
+          return;
+        }
+
+        items.forEach((item) => {
+          const card = document.createElement("article");
+          card.className = "notification-card";
+
+          const head = document.createElement("div");
+          head.className = "notification-card-head";
+          const empresaInfo = document.createElement("div");
+          empresaInfo.innerHTML = `<strong>${item.empresa_nombre || "Empresa"}</strong><p>${
+            item.empresa_correo || "Sin correo"
+          }</p>`;
+          const status = document.createElement("span");
+          status.className = `status-pill status-pill--${item.estado}`;
+          status.textContent = item.estado === "respondido" ? "Respondido" : "Pendiente";
+          head.appendChild(empresaInfo);
+          head.appendChild(status);
+
+          const body = document.createElement("div");
+          body.className = "notification-card-body";
+          const resumen = document.createElement("p");
+          resumen.textContent = item.mensaje || "Solicitud enviada";
+          const meta = document.createElement("ul");
+          meta.className = "notification-meta";
+          const materialLine = document.createElement("li");
+          materialLine.textContent = `Material: ${item.material || "Sin especificar"}`;
+          const qtyLine = document.createElement("li");
+          qtyLine.textContent = `Cantidad: ${item.cantidad || 1}`;
+          const dateLine = document.createElement("li");
+          dateLine.textContent = formatDateTime(item.created_at);
+          meta.appendChild(materialLine);
+          meta.appendChild(qtyLine);
+          meta.appendChild(dateLine);
+          if (item.comentario) {
+            const note = document.createElement("li");
+            note.textContent = `Tu nota: ${item.comentario}`;
+            meta.appendChild(note);
+          }
+          body.appendChild(resumen);
+          body.appendChild(meta);
+
+          card.appendChild(head);
+          card.appendChild(body);
+
+          if (item.estado === "respondido") {
+            const response = document.createElement("div");
+            response.className = "notification-response-info";
+            const label = document.createElement("p");
+            label.innerHTML = `<strong>Respuesta:</strong> ${
+              item.respuesta === "disponible" ? "Disponible" : "No disponible"
+            }`;
+            const message = document.createElement("p");
+            message.textContent = item.respuesta_mensaje || "La empresa no agrego comentarios.";
+            const responded = document.createElement("p");
+            responded.className = "notification-date";
+            responded.textContent = `Respondido: ${formatDateTime(item.responded_at)}`;
+            response.appendChild(label);
+            response.appendChild(message);
+            response.appendChild(responded);
+            card.appendChild(response);
+          }
+
+          clienteNotificacionesEl.appendChild(card);
+        });
+      };
+
+      const loadClienteNotificaciones = async () => {
+        if (!token || !clienteNotificacionesEl) {
+          return;
+        }
+        try {
+          const response = await fetch("/api/notificaciones/cliente", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!response.ok) {
+            throw new Error("No autorizado");
+          }
+          const data = await response.json();
+          renderClienteNotificaciones(data.notificaciones || []);
+        } catch (error) {
+          const fallback = document.createElement("div");
+          fallback.className = "notification-empty";
+          fallback.textContent = "No se pudieron cargar las notificaciones.";
+          clienteNotificacionesEl.innerHTML = "";
+          clienteNotificacionesEl.appendChild(fallback);
+        }
+      };
+
+      loadCliente();
+      loadClienteNotificaciones();
+
+      if (guardarBtn) {
+        guardarBtn.addEventListener("click", guardarCliente);
+      }
+
+      if (fotoButton) {
+        fotoButton.addEventListener("click", subirFoto);
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("ecoris_token");
+          localStorage.removeItem("ecoris_user");
+          window.location.href = "../Sesiones/iniciosesion.html";
+        });
+      }
+    </script>
+  </body>
+</html>
