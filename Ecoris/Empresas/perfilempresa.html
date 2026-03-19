@@ -44,25 +44,25 @@
               <p>Ecoris</p>
             </div>
           </div>
-          <button class="profile-nav-item is-active" type="button">
+          <button class="profile-nav-item is-active" type="button" data-section="perfil" data-target="#perfil-section">
             <span aria-hidden="true">●</span>
             <span>Perfil</span>
           </button>
-          <button class="profile-nav-item" type="button">
+          <button class="profile-nav-item" type="button" data-section="actividad" data-target="#actividad-section">
             <span aria-hidden="true">◆</span>
             <span>Actividad</span>
           </button>
-          <button class="profile-nav-item" type="button">
+          <button class="profile-nav-item" type="button" data-section="productos" data-target="#productos-section">
             <span aria-hidden="true">▣</span>
             <span>Productos</span>
           </button>
-          <button class="profile-nav-item" type="button">
+          <button class="profile-nav-item" type="button" data-section="configuracion" data-target="#configuracion-section">
             <span aria-hidden="true">⚙</span>
             <span>Configuracion</span>
           </button>
         </aside>
         <section class="profile-main">
-          <div class="profile-hero-card animate-in">
+          <div class="profile-hero-card animate-in" id="perfil-section" data-profile-section="perfil">
             <div class="profile-hero-main">
               <p class="profile-hero-eyebrow">Empresa verificada</p>
               <h1 class="profile-hero-title" id="perfil-nombre">-</h1>
@@ -86,7 +86,7 @@
             </div>
           </div>
           <div class="profile-panels">
-            <section class="empresa-form-panel profile-card profile-card--form">
+            <section class="empresa-form-panel profile-card profile-card--form" id="configuracion-section" data-profile-section="configuracion">
               <div class="form-section glimmer-card">
                 <div class="section-title">Informacion general</div>
                 <div class="form-grid">
@@ -152,12 +152,18 @@
                 </div>
               </div>
             </section>
-            <section class="profile-card profile-card--activity">
+            <section class="profile-card profile-card--activity" id="actividad-section" data-profile-section="actividad">
               <div class="section-title">Actividad reciente</div>
-              <div class="mini-list" id="perfil-productos"></div>
+              <p class="section-subtitle">Seguimiento rapido de tus ultimos movimientos y publicaciones.</p>
+              <div class="activity-timeline" id="perfil-activity-list"></div>
             </section>
           </div>
-          <section class="profile-card profile-card--notifications">
+          <section class="profile-card profile-card--products" id="productos-section" data-profile-section="productos">
+            <div class="section-title">Residuos publicados</div>
+            <p class="section-subtitle">Lista compacta de tus materiales mas recientes.</p>
+            <div class="mini-list" id="perfil-productos"></div>
+          </section>
+          <section class="profile-card profile-card--notifications" id="notificaciones-section" data-profile-section="actividad">
             <div class="section-title">Notificaciones de pedidos</div>
             <p class="section-subtitle">
               Responde si el material esta disponible o no para mantener informados a los clientes.
@@ -212,6 +218,9 @@
       const totalEl = document.getElementById("perfil-total");
       const precioEl = document.getElementById("perfil-precio");
       const empresaNotificacionesEl = document.getElementById("empresa-notificaciones");
+      const activityListEl = document.getElementById("perfil-activity-list");
+      const navButtons = document.querySelectorAll(".profile-nav-item");
+      const profileSections = document.querySelectorAll("[data-profile-section]");
       let mapInstance = null;
       let mapMarker = null;
       let lastGeocodeResults = [];
@@ -284,6 +293,84 @@
         return `$${parsed} ${moneda || ""}`.trim();
       };
 
+      const formatDateTime = (value) => {
+        if (!value) {
+          return "";
+        }
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return "";
+        }
+        return date.toLocaleString("es-MX", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        });
+      };
+
+      const renderActivityTimeline = (items) => {
+        if (!activityListEl) {
+          return;
+        }
+        activityListEl.innerHTML = "";
+
+        if (!items || !items.length) {
+          const empty = document.createElement("div");
+          empty.className = "mini-empty";
+          empty.textContent = "Sin movimientos recientes.";
+          activityListEl.appendChild(empty);
+          return;
+        }
+
+        items.slice(0, 3).forEach((item) => {
+          const activityItem = document.createElement("article");
+          activityItem.className = "activity-item";
+
+          const icon = document.createElement("div");
+          icon.className = "activity-icon";
+          const iconSource = (item?.nombre_material || "").trim();
+          icon.textContent = iconSource ? iconSource.charAt(0).toUpperCase() : "•";
+
+          const content = document.createElement("div");
+          content.className = "activity-content";
+
+          const title = document.createElement("p");
+          title.className = "activity-title";
+          title.textContent = item?.nombre_material || "Residuo";
+
+          const meta = document.createElement("div");
+          meta.className = "activity-meta";
+
+          const statusLabel = document.createElement("span");
+          statusLabel.textContent = item?.estado_material || "Estado pendiente";
+          meta.appendChild(statusLabel);
+
+          const qtyLabel = document.createElement("span");
+          qtyLabel.textContent = item?.cantidad
+            ? `${item.cantidad} ${item.unidad || ""}`.trim()
+            : "Cantidad no registrada";
+          meta.appendChild(qtyLabel);
+
+          const priceLabel = document.createElement("span");
+          const priceValue = toMoney(item?.precio_unitario, item?.moneda);
+          priceLabel.textContent = priceValue;
+          meta.appendChild(priceLabel);
+
+          const timestamp = document.createElement("p");
+          timestamp.className = "activity-date";
+          const formattedDate = formatDateTime(item?.updated_at || item?.fecha_actualizacion || item?.created_at);
+          timestamp.textContent = formattedDate || "En espera de actualizacion";
+
+          content.appendChild(title);
+          content.appendChild(meta);
+          content.appendChild(timestamp);
+
+          activityItem.appendChild(icon);
+          activityItem.appendChild(content);
+
+          activityListEl.appendChild(activityItem);
+        });
+      };
+
       const renderProductos = (items) => {
         if (!productosEl) {
           return;
@@ -294,6 +381,7 @@
           empty.className = "mini-empty";
           empty.textContent = "Aun no hay residuos publicados.";
           productosEl.appendChild(empty);
+          renderActivityTimeline([]);
           return;
         }
 
@@ -317,20 +405,8 @@
           row.appendChild(price);
           productosEl.appendChild(row);
         });
-      };
 
-      const formatDateTime = (value) => {
-        if (!value) {
-          return "";
-        }
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) {
-          return "";
-        }
-        return date.toLocaleString("es-MX", {
-          dateStyle: "medium",
-          timeStyle: "short",
-        });
+        renderActivityTimeline(items);
       };
 
       const renderEmpresaNotificaciones = (items) => {
@@ -776,6 +852,89 @@
         });
       }
 
+      const setActiveNav = (sectionKey) => {
+        if (!sectionKey || !navButtons.length) {
+          return;
+        }
+        navButtons.forEach((button) => {
+          const isActive = button.dataset.section === sectionKey;
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-current", isActive ? "page" : "false");
+        });
+      };
+
+      const initProfileNav = () => {
+        if (!navButtons.length || !profileSections.length) {
+          return;
+        }
+
+        const cachedTargets = new Map();
+        const getTargetSection = (selector) => {
+          if (!selector) {
+            return null;
+          }
+          if (!cachedTargets.has(selector)) {
+            cachedTargets.set(selector, document.querySelector(selector));
+          }
+          return cachedTargets.get(selector);
+        };
+
+        const initialKey = navButtons[0]?.dataset?.section;
+        if (initialKey) {
+          setActiveNav(initialKey);
+        }
+
+        navButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const sectionKey = button.dataset.section;
+            const targetSection = getTargetSection(button.dataset.target);
+            if (targetSection) {
+              targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+            setActiveNav(sectionKey);
+          });
+        });
+
+        if ("IntersectionObserver" in window) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              const visibleEntry = entries
+                .filter((entry) => entry.isIntersecting)
+                .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+              const sectionKey = visibleEntry?.target?.dataset?.profileSection;
+              if (sectionKey) {
+                setActiveNav(sectionKey);
+              }
+            },
+            {
+              rootMargin: "-45% 0px -45% 0px",
+              threshold: [0.2, 0.35, 0.5, 0.65],
+            }
+          );
+          profileSections.forEach((section) => observer.observe(section));
+        } else {
+          const handleScroll = () => {
+            let closestSection = null;
+            let smallestOffset = Number.POSITIVE_INFINITY;
+            profileSections.forEach((section) => {
+              const rect = section.getBoundingClientRect();
+              const offset = Math.abs(rect.top);
+              if (offset < smallestOffset) {
+                smallestOffset = offset;
+                closestSection = section;
+              }
+            });
+            const sectionKey = closestSection?.dataset?.profileSection;
+            if (sectionKey) {
+              setActiveNav(sectionKey);
+            }
+          };
+          document.addEventListener("scroll", handleScroll, { passive: true });
+          handleScroll();
+        }
+      };
+
+      initProfileNav();
       initMap();
       loadPerfil();
       loadEmpresaNotificaciones();

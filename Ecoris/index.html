@@ -238,6 +238,40 @@
 				if (loader) {
 					loader.classList.add("is-hidden");
 				}
+
+				const recommendationsSection = document.querySelector(".recommendations-section");
+				const toggleSecondaryBackground = (isActive) => {
+					document.body.classList.toggle("is-showing-secondary-bg", Boolean(isActive));
+				};
+
+				if (recommendationsSection) {
+					if ("IntersectionObserver" in window) {
+						const recommendationObserver = new IntersectionObserver(
+							(entries) => {
+								entries.forEach((entry) => {
+									toggleSecondaryBackground(
+										entry.isIntersecting && entry.intersectionRatio >= 0.35
+									);
+								});
+							},
+							{
+								threshold: [0.25, 0.35, 0.55],
+								rootMargin: "0px 0px -20% 0px",
+							}
+						);
+						recommendationObserver.observe(recommendationsSection);
+					} else {
+						const handleScrollFallback = () => {
+							const rect = recommendationsSection.getBoundingClientRect();
+							const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+							const isVisible =
+								rect.top < viewportHeight * 0.65 && rect.bottom > viewportHeight * 0.35;
+							toggleSecondaryBackground(isVisible);
+						};
+						handleScrollFallback();
+						window.addEventListener("scroll", handleScrollFallback, { passive: true });
+					}
+				}
 			});
 		</script>
 	</body>
